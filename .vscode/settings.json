@@ -1,0 +1,19 @@
+{
+   "sqltools.connections": [
+      {
+         "mysqlOptions": {
+            "authProtocol": "default",
+            "enableSsl": "Disabled"
+         },
+         "previewLimit": 50,
+         "server": "localhost",
+         "port": 3306,
+         "driver": "MariaDB",
+         "name": "local",
+         "database": "btp",
+         "username": "root",
+         "password": "88888888"
+      }
+   ],
+   "git.ignoreLimitWarning": true
+}

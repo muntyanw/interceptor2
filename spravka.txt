@@ -1,0 +1,131 @@
+INTERCEPTOR
+
+******************************************************************************************************************
+https://my.telegram.org/apps
+
+App api_id:
+24364263
+App api_hash:
+1f03c4f0e8617dd5fe4f16e9d629f47c
+App title:
+interceptor
+Short name:
+inter
+alphanumeric, 5-32 characters
+
+FCM credentials  Update  
+Available MTProto servers
+Test configuration:
+149.154.167.40:443
+DC 2
+
+Public keys:
+-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEAyMEdY1aR+sCR3ZSJrtztKTKqigvO/vBfqACJLZtS7QMgCGXJ6XIR
+yy7mx66W0/sOFa7/1mAZtEoIokDP3ShoqF4fVNb6XeqgQfaUHd8wJpDWHcR2OFwv
+plUUI1PLTktZ9uW2WE23b+ixNwJjJGwBDJPQEQFBE+vfmH0JP503wr5INS1poWg/
+j25sIWeYPHYeOrFp/eXaqhISP6G+q2IeTaWTXpwZj4LzXq5YOpk4bYEQ6mvRq7D1
+aHWfYmlEGepfaYR8Q0YqvvhYtMte3ITnuSJs171+GDqpdKcSwHnd6FudwGO4pcCO
+j4WcDuXc2CTHgH8gFTNhp/Y8/SpDOhvn9QIDAQAB
+-----END RSA PUBLIC KEY-----
+Production configuration:
+149.154.167.50:443
+DC 2
+
+Public keys:
+-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEA6LszBcC1LGzyr992NzE0ieY+BSaOW622Aa9Bd4ZHLl+TuFQ4lo4g
+5nKaMBwK/BIb9xUfg0Q29/2mgIR6Zr9krM7HjuIcCzFvDtr+L0GQjae9H0pRB2OO
+62cECs5HKhT5DZ98K33vmWiLowc621dQuwKWSQKjWf50XYFw42h21P2KXUGyp2y/
++aEyZ+uVgLLQbRA1dEjSDZ2iGRy12Mk5gpYc397aYp438fsJoHIgJ2lgMv5h7WY9
+t6N/byY9Nw9p21Og3AoXSL2q/2IJ1WRUhebgAdGVMlV1fkuOQoEzR7EdpqtQD9Cs
+5+bfo3Nhmcyvk5ftB0WkJ9z6bNZ7yxrP8wIDAQAB
+-----END RSA PUBLIC KEY-----
+
+********************************************************************************************************************
+
+ssh inter@199.80.55.18
+chmod 400 D:\Arhiv\ssh\interceptor\ssh-rsa.txt
+
+
+SSH server information
+IP address: 199.80.55.18
+Username: root
+Password: 0fD9rm5T3KB2vEl
+
+inter@199.80.55.18
+B32Xi7ruM3
+
+
+fozzy
+mvv.prog@gmail.com
+2TJWK8cbw4pp2ds
+
+
+mysql
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '!A3z5puU68G*';
+FLUSH PRIVILEGES;
+mysql -u root -p -h localhost
+mysqldump -u root -p btp > D:\\backup.sql
+mysql -u root -p -h localhost btp < /usr/share/nginx/html/interceptor/btp.sql
+
+mysql -u root -p -h 127.0.0.1 -D btp
+
+
+
+
+#!/bin/sh
+GIT_WORK_TREE=/usr/share/nginx/html/interceptor git checkout -f
+
+git remote add production root@199.80.55.18:/usr/share/nginx/html/interceptor/your_project.git
+
+git remote add production inter@199.80.55.18:/usr/share/nginx/html/interceptor
+git push production master
+
+sudo usermod -aG sudo inter
+
+sudo chown -R inter:inter /usr/share/nginx/html
+
+sudo nano /etc/nginx/sites-available/intercept
+
+server {
+    listen 80;
+    server_name 199.80.55.18;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+sudo ln -s /etc/nginx/sites-available/intercept /etc/nginx/sites-enabled/
+
+
+
+source venv/bin/activate
+
+wscat -c ws://199.80.55.18/ws/telegram/
+
+
+
+ssh-keygen -t rsa -b 4096 -C "mvv.prog@google.com"
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDC05ZNvM8ic6/K9FaMWvOz2a01ifH8/ZSweh5+yB03LLMqpYN2isO51r1vW7IT7tdZk64goC5FF+9YpVVjQYr4p7gEJzs6nT76pvxBqcDxRHydh8SMlGSk4Q9PsWZqcXzOmETBoXh2iYSJPhjaMe1DDH+gpI3fezkOLLcomL4lTbaj+AgkqHI50HQfU1q5iUovEdfVqSoLVGVdKaWQMElOffbquB+umt0HjEUyJKbH03HXgMjSpIz71I+dA3c+ICZzJz2CeVer6X2zWtt9VnuWOzWBM62CBst6cUix54rEmVGjhZY0prDONtI5J4qxiUl/k9NIw6IjS96jZfW7vxD4MNOUx2RCtPpfg5PVkO5c5u5IjthIQTRv/6POOtOONQ9RzJRuTeW6uBVDrv/V6ovzZSx0CoIYjAZsJGUmNMpipvETYAABefkASVNDXDmN4DSegs5iRE18xnIiM9iIQSJ44Q2Sv+rGJ0Bt6N/vnq3TyzBUYUlh/nE6Ums6O/XKP1XDkkMu1Wdn9BvteKsYTVNXnvOFAubHAjf6lA6i9KJBhaAzLMaTnLTyt4pci5iac/crQr7OUNL4Dpq4mJZZ+IqFn9XX8UhV5SoZM0gJbCEernWvL4BW0cTZz2G7JgHGLzMMUzl2jOyXqdYwqOIhVL7+uMjgQpOs6l+HtSAUBPsSgQ== mvv.prog@google.com
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7XRFi6kD9wH22Vys4JZp4EeDiJkFizrovDgw44+liuK9sGQx00mQcyEyt9xvPxWC54xfvvZJ4gjYk8wdGOT+WuImXPT2lF3niJmn0iRiQV8bDVWp9Pzat1UwCoDgGiEMENB68sj3KQgYEAj8ULAadusCDwfNwK2pzesauwgenWR7DBzJXEeRRG5BX9Q8m3Z6j84T/K/470GavBDSO/Hdr2XwfCbRAphKrdK5MIGTKYu0O4/GrmQm1FEDUeBXa2cNub3A+Fqsg725JRlcUzKAEM6cpEn0fYHh02w2ARF9wE93hCjTVI0cqHDs7059jNVXEwOe93rGOpP9NlWeIeTJr rsa-key-20240829
+
+ssh-copy-id -i ~/.ssh/id_rsa.pub inter@199.80.55.18
+
+ssh -i D:\Arhiv\ssh\interceptor\key-pub.txt inter@B32Xi7ruM3
+
+git remote add production inter@199.80.55.18:/usr/share/nginx/html/interceptor
+
+sudo chown -R inter:inter /usr/share/nginx/html/interceptor
+
+
+
+ 

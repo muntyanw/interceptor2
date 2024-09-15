@@ -1,0 +1,431 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telegram Messages</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <style>
+      .message-panel {
+        max-height: 600px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #f8f9fa;
+      }
+
+      .message-item {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #ffffff;
+      }
+
+      .edit-panel {
+        background-color: #e9ecef;
+        border-radius: 5px;
+        padding: 20px;
+        border: 1px solid #ccc;
+      }
+
+      .panel-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .file-list li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .file-list img {
+        max-width: 100px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+        <div class="row" style="margin-top: 1em;">
+            <div class="col-md-2">
+                <a href="{% url 'contacts_and_channels' %}" class="btn btn-info mb-3" target="_blank"
+                    >Просмотр ID контактов и каналов</a
+                >
+            </div>
+        <div class="col-md-2">
+          <form method="post" action="{% url 'update_auto_send_setting' %}">
+            {% csrf_token %}
+            <div class="form-check">
+                <input
+                class="form-check-input"
+                type="checkbox"
+                name="is_enabled"
+                id="autoSendCheck"
+                {{ setting.is_enabled|yesno:"checked," }}
+              />
+              <label class="form-check-label" for="autoSendCheck">
+                Перенаправлять все без медерирования
+              </label>
+              <button type="submit" class="btn btn-primary">
+                Сохранить настройки
+              </button>
+            </div>
+            
+          </form>
+          {% comment %} <p>
+            Автоматически отправлено сообщений: {{ setting.auto_sent_count }}
+          </p> {% endcomment %}
+        </div>
+        <div class="col-md-1">
+          
+        </div>
+        <div class="col-md-5">
+        </div>
+        <div class="col-md-2">
+          <a class="btn btn-secondary" id="logout-button" onclick="logout()">
+            Logout
+          </a>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+              <div class="message-panel">
+                <div class="panel-title">Список сообщений</div>
+                <div class="list-group">
+                  {% for message in messages %}
+                  <div class="list-group-item message-item">
+                    <p>{{ message.text }}</p>
+                    <ul class="file-list">
+                      {% for file in message.files %}
+                      <li data-file-url="{{ file.url }}">
+                        {% if ".jpg" in file.url or ".jpeg" in file.url or ".png" in file.url %}
+                            <img src="{{ file.url }}" alt="file" />
+                        {% else %}
+                            <a href="{{ file.url }}" target="_blank">{{ file.name }}</a>
+                        {% endif %}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                    <div>
+                      <a href="#"
+                        class="btn btn-primary edit-button mr-2"
+                        data-message-id="{{ message.pk }}"
+                        data-message-text="{{ message.text }}"
+                      >
+                        Редактировать
+                      </a>
+                      <a
+                        href="#"
+                        class="btn btn-success send-button"
+                        data-url="{% url 'send_message' message.pk message.chat_id %}"
+                        data-message-id="{{ message.pk }}"
+                        data-chat-id="{{ message.chat_id }}"
+                      >
+                        Отправить
+                      </a>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+        </div>
+        <!-- Панель для редактирования сообщения -->
+        <div class="col-md-6">
+          <div class="edit-panel" id="edit-panel">
+            <h3 class="panel-title">Редактирование сообщения</h3>
+            <form id="edit-form" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="edit-text">Текст сообщения:</label>
+                <textarea
+                  name="text"
+                  id="edit-text"
+                  class="form-control"
+                  rows="10"
+                ></textarea>
+              </div>
+              <h3>Файлы</h3>
+              <ul class="file-list" id="file-list">
+                <!-- Список файлов -->
+              </ul>
+              <input type="file" id="new-file" name="new-file" multiple />
+              <button
+                type="button"
+                class="btn btn-primary mt-3"
+                id="send-edited"
+              >
+                Отправить
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        var chatSocket;
+        var reconnectInterval = 5000; // Интервал переподключения в миллисекундах
+    
+        function createWebSocket() {
+          chatSocket = new WebSocket("ws://" + window.location.host + "/ws/telegram/");
+    
+          chatSocket.onopen = function () {
+            console.log("WebSocket connection established.");
+          };
+    
+          chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const message = data.message;
+            const files = data.files || [];
+    
+            const messageList = $(".list-group");
+            let newMessage = `<div class="list-group-item message-item"><p>${message}</p>`;
+    
+            // Добавление файлов, если они есть
+            if (files.length > 0) {
+              newMessage += `<ul class="file-list">`;
+              files.forEach(function (file) {
+                if (
+                  file.endsWith(".jpg") ||
+                  file.endsWith(".png") ||
+                  file.endsWith(".jpeg")
+                ) {
+                  // Отображаем изображение
+                  newMessage += `<li data-file-url="${file}"><img src="${file}" alt="file" style="max-width: 100px; margin-bottom: 10px;"/></li>`;
+                } else {
+                  // Ссылка на файл
+                  newMessage += `<li data-file-url="${file}"><a href="${file}" target="_blank">${file}</a></li>`;
+                }
+              });
+              newMessage += `</ul>`;
+            }
+    
+            newMessage += `<div>
+                        <a href="#" class="btn btn-primary edit-button mr-2" data-message-id="${data.message_id}" data-message-text="${message}">Редактировать</a>
+                        <a href="#" class="btn btn-success send-button"
+                           data-message-id="${data.message_id}"
+                           data-chat-id="${data.chat_id}">Отправить</a>
+                    </div></div>`;
+            messageList.append(newMessage);
+          };
+    
+          chatSocket.onclose = function () {
+            console.log("WebSocket connection closed. Reconnecting...");
+            setTimeout(createWebSocket, reconnectInterval);
+          };
+    
+          chatSocket.onerror = function (error) {
+            console.error("WebSocket error: ", error);
+            chatSocket.close(); // Закрытие соединения вызовет событие onclose
+          };
+        }
+    
+        createWebSocket(); // Инициализация WebSocket
+    
+        // Обработка клика по кнопке "Редактировать"
+        $(document).on("click", ".edit-button", function (event) {
+          event.preventDefault();
+    
+          var $button = $(this);
+          var messageId = $button.data("message-id");
+          var messageText = $button.data("message-text");
+          var $messageItem = $button.closest(".message-item");
+          var $fileItems = $messageItem.find(".file-list li");
+    
+          // Заполняем текст сообщения
+          $("#edit-text").val(messageText);
+    
+          // Очистка списка файлов
+          $("#file-list").empty();
+    
+          // Заполнение списка файлов
+          $fileItems.each(function () {
+            var $fileItem = $(this);
+            var fileUrl = $fileItem.data("file-url");
+            var fileName = $fileItem.find("a").text() || "Файл";
+    
+            var fileHtml = `<li>
+                            ${
+                              fileUrl.endsWith(".jpg") ||
+                              fileUrl.endsWith(".jpeg") ||
+                              fileUrl.endsWith(".png")
+                                ? `<img src="${fileUrl}" alt="file" style="max-width: 100px; margin-bottom: 10px;"/>`
+                                : `<a href="${fileUrl}" target="_blank">${fileName}</a>`
+                            }
+                            <button type="button" class="btn btn-danger btn-sm remove-file" data-file-url="${fileUrl}">Удалить</button>
+                        </li>`;
+    
+            $("#file-list").append(fileHtml);
+          });
+    
+          // Обработчик удаления файла
+          $(document)
+            .off("click", ".remove-file")
+            .on("click", ".remove-file", function () {
+              $(this).parent().remove();
+            });
+    
+          // Обработка загрузки новых файлов и отображение их превью
+          $("#new-file")
+            .off("change")
+            .on("change", function (event) {
+              var files = event.target.files;
+              for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+    
+                reader.onload = function (e) {
+                  var fileHtml = `<li>
+                                    <img src="${e.target.result}" alt="file" style="max-width: 100px; margin-bottom: 10px;"/>
+                                    <button type="button" class="btn btn-danger btn-sm remove-file">Удалить</button>
+                                </li>`;
+                  $("#file-list").append(fileHtml);
+                };
+    
+                reader.readAsDataURL(file);
+              }
+            });
+    
+          $("#send-edited")
+            .off("click")
+            .on("click", function () {
+              var newText = $("#edit-text").val();
+              var newFiles = $("#new-file")[0].files;
+    
+              var existingFiles = [];
+              $("#file-list li").each(function () {
+                var fileUrl = $(this)
+                  .find("button.remove-file")
+                  .data("file-url");
+                if (fileUrl) {
+                  existingFiles.push(fileUrl);
+                }
+              });
+    
+              // Формируем данные для отправки
+              var sendData = {
+                message_id: messageId,
+                new_text: newText,
+                existing_files: existingFiles,
+                new_files: [],
+              };
+    
+              // Функция отправки через WebSocket
+              function sendWebSocketData() {
+                chatSocket.send(JSON.stringify(sendData));
+              }
+    
+              // Если есть новые файлы, обрабатываем их
+              if (newFiles.length > 0) {
+                var filesProcessed = 0;
+    
+                for (var i = 0; i < newFiles.length; i++) {
+                  (function (file) {
+                    var reader = new FileReader();
+    
+                    reader.onload = function (e) {
+                      // Добавление файла в sendData.new_files
+                      sendData.new_files.push({
+                        name: file.name, // Имя файла
+                        data: e.target.result, // Данные файла в формате base64
+                      });
+                      filesProcessed++;
+    
+                      // Если все файлы обработаны, отправляем данные через WebSocket
+                      if (filesProcessed === newFiles.length) {
+                        sendWebSocketData();
+                      }
+                    };
+    
+                    reader.readAsDataURL(file); // Чтение файла как Data URL (base64)
+                  })(newFiles[i]);
+                }
+              } else {
+                // Если новых файлов нет, сразу отправляем данные через WebSocket
+                sendWebSocketData();
+              }
+            });
+        });
+    
+        // Обработка клика по кнопке "Отправить" под перехваченным сообщением
+        $(document).on("click", ".send-button", function (event) {
+          event.preventDefault();
+    
+          var $button = $(this); // Сохранение ссылки на кнопку
+          $button.prop("disabled", true); // Отключение кнопки
+          $button.css("background-color", "#d3d3d3");
+    
+          var messageItem = $button.closest(".message-item");
+    
+          var existingFiles = [];
+          messageItem.find(".file-list li").each(function () {
+            var fileUrl = $(this).data("file-url");
+            if (fileUrl) {
+              existingFiles.push(fileUrl);
+            }
+          });
+    
+          // Формируем данные для отправки
+          var sendData = {
+            message_id: "",
+            new_text: messageItem.find("p").text(),
+            existing_files: existingFiles,
+            new_files: [],
+          };
+    
+          chatSocket.send(JSON.stringify(sendData));
+    
+          // (Optional) Вы можете снова активировать кнопку после отправки, если необходимо:
+          // $button.prop("disabled", false);
+        });
+      });
+
+      // Function to get CSRF token from cookie
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+      }
+
+      function logout() {
+        fetch('/logout/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') // Assuming you're using Django's CSRF protection
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload(); // Refresh the page after logout
+            } else {
+                console.error('Logout failed');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    };
+    </script>
+    
+  </body>
+</html>

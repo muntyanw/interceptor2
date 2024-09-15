@@ -1,0 +1,3 @@
+#!/bin/sh
+GIT_WORK_TREE=/usr/share/nginx/html/interceptor git checkout -f
+

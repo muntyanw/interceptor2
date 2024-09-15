@@ -1,0 +1,48 @@
+Шаги для сохранения отображения ответного сообщения:
+Получите исходное сообщение:
+
+Проверьте, есть ли в сообщении поле reply_to. Если оно существует, это означает, что сообщение является ответом на другое сообщение.
+python
+Copy code
+reply_to_msg_id = event.message.reply_to_msg_id
+if reply_to_msg_id:
+    original_message = await event.message.get_reply_message()
+Отправьте сообщение с сохранением ответного вида:
+
+Используйте метод send_message, указывая параметр reply_to для сохранения связи между сообщениями.
+python
+Copy code
+if reply_to_msg_id:
+    await client.send_message(target_channel_id, event.message.text, reply_to=original_message.id)
+else:
+    await client.send_message(target_channel_id, event.message.text)
+Пример кода:
+Вот пример того, как это можно реализовать:
+
+python
+Copy code
+from telethon import TelegramClient, events
+
+client = TelegramClient('session_name', api_id, api_hash)
+
+@client.on(events.NewMessage(chats=chat_ids))
+async def handler(event):
+    # Получаем ID сообщения, на которое дан ответ
+    reply_to_msg_id = event.message.reply_to_msg_id
+
+    if reply_to_msg_id:
+        # Получаем исходное сообщение, на которое был ответ
+        original_message = await event.message.get_reply_message()
+
+        # Пересылаем сообщение с сохранением ответного вида
+        await client.send_message(target_channel_id, event.message.text, reply_to=original_message.id)
+    else:
+        # Если нет ответа, просто пересылаем сообщение
+        await client.send_message(target_channel_id, event.message.text)
+
+async def main():
+    await client.start()
+    await client.run_until_disconnected()
+
+client.loop.run_until_complete(main())
+
