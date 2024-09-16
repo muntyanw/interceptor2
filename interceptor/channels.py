@@ -40,3 +40,10 @@ replacements_in_images = { # ключи (первое слово) в нижне�
     '@samcrypto_master': '@ParamPam',
 }
 
+# Пример вызова функции
+# processed_images = find_and_replace_in_images(
+#     ["image1.jpg", "image2.jpg", "image3.jpg"],  # Путь к изображениям
+#     "template_image.jpg",  # Путь к изображению-шаблону
+#     "replacement_image.jpg"  # Путь к изображению для замены
+# )
+
