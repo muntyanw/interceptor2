@@ -8,10 +8,6 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 
-
-api_id = 25965329 #24364263
-api_hash = "6604012087bc1273f1f918571c02af24" #"1f03c4f0e8617dd5fe4f16e9d629f47c"
-
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

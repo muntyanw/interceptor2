@@ -6,8 +6,15 @@ import re
 import logging
 from . import channels
 import numpy as np
+import os
+from telethon import Button
 
 logger = logging.getLogger(__name__)
+
+def is_image_file(file_path):
+    image_extensions = ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.tiff']
+    ext = os.path.splitext(file_path)[1].lower()
+    return ext in image_extensions
 
 def replace_words(text, channel_id):
     channel_info = channels.channels_to_listen.get(channel_id, {})
@@ -70,6 +77,12 @@ def replace_words_in_images(file_paths, replacements_dict):
     processed_paths = []
 
     for image_path in file_paths:
+        
+        if not is_image_file(image_path):
+           logger.info(f"[replace_words_in_images] Файл {image_path} не является изображением")
+           processed_paths.append(image_path)
+           continue  # Переходим к следующему файлу
+        
         # Загрузка изображения
         img = cv2.imread(image_path)
         
@@ -188,3 +201,37 @@ def find_and_replace_in_images(image_paths, template_image_path, replacement_ima
 
     return processed_paths
 
+def update_buttons(buttons, replacements):
+    """
+    Метод для обновления ссылок на кнопках в соответствии с текстом кнопки.
+
+    :param buttons: Список строк с инлайн-кнопками (список списков кнопок).
+    :param replacements: Словарь с соответствием текстов кнопок и новых ссылок, например:
+                         {'Текущая кнопка': 'https://новая-ссылка.com'}
+    :return: Обновленный список строк с кнопками.
+    """
+    updated_buttons = []
+
+    # Проходим по строкам кнопок
+    if buttons is not None:
+        for row in buttons:
+            updated_row = []
+            
+            # Проходим по каждой кнопке в строке (в строке находится список кнопок)
+            for button in row:
+                if hasattr(button, 'url'):
+                    # Если текст кнопки есть в replacements, заменяем ссылку
+                    if button.text in replacements:
+                        new_url = replacements[button.text]
+                        updated_row.append(Button.url(button.text, new_url))
+                    else:
+                        # Если текст кнопки не найден в replacements, оставляем кнопку без изменений
+                        updated_row.append(button)
+                else:
+                    # Если кнопка не является URL-кнопкой, добавляем её без изменений
+                    updated_row.append(button)
+            
+            # Добавляем обновленную строку кнопок в результирующий список
+            updated_buttons.append(updated_row)
+
+    return updated_buttons

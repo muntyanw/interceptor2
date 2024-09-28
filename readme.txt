@@ -7,7 +7,7 @@ Password: 0fD9rm5T3KB2vEl
 ssh root@199.80.55.18
 
 Второй пользователь
-inter
+inter@199.80.55.18
 B32Xi7ruM3
 
 mysql
