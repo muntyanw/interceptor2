@@ -235,3 +235,11 @@ def update_buttons(buttons, replacements):
             updated_buttons.append(updated_row)
 
     return updated_buttons
+
+def hash_file(file_path):
+    """Вычисляет хэш для файла по его содержимому."""
+    hasher = hashlib.sha256()
+    with open(file_path, 'rb') as f:
+        buf = f.read()
+        hasher.update(buf)
+    return hasher.hexdigest()

@@ -25,14 +25,6 @@ sent_messages = deque(maxlen=MAX_SENT_MESSAGES)  # Очередь с огран�
 message_parts = defaultdict(lambda: {'files': [], 'text': None, 'sender_name': None, 'start_time': None})
 COLLECT_TIMEOUT = 2  # Таймаут ожидания всех частей сообщения
 
-def hash_file(file_path):
-    """Вычисляет хэш для файла по его содержимому."""
-    hasher = hashlib.sha256()
-    with open(file_path, 'rb') as f:
-        buf = f.read()
-        hasher.update(buf)
-    return hasher.hexdigest()
-
 # Создание клиента
 client = TelegramClient(ses.session, channels.api_id, channels.api_hash,
                         connection_retries=10,  # Количество попыток переподключения
@@ -46,7 +38,7 @@ async def send_message_to_channels(message_text, files, reply_to_msg_id=None, bu
     unique_id = message_text if message_text else ""
     if files:
         for file in files:
-            unique_id += hash_file(file)  # Добавляем хэш файла к идентификатору
+            unique_id += utils.hash_file(file)  # Добавляем хэш файла к идентификатору
     if unique_id in sent_messages:
         logger.warning("[send_message_to_channels] Сообщение или файл уже были отправлены, пропуск отправки.")
         return
