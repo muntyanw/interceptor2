@@ -15,6 +15,7 @@ channels_to_listen = {
             'Bingx': 'Google',
             'SamCrypto_Master': 'parampam',
         },
+        'channels_to_send':[-1002353873572] #каналы куда отсылаем каналы с -100
     },
     2204843457: { #Intertest
         'moderation_if_image': False,
@@ -24,12 +25,10 @@ channels_to_listen = {
             'Bingx': 'Google',
             'SamCrypto_Master': 'parampam',
         },
+        'channels_to_send':[-1002353873572] #каналы куда отсылаем каналы с -100
     },
      
 }
-
-#каналы куда отсылаем каналы с -100
-channels_to_send = [-1002353873572] #, 2170620330
 
 replacements_in_images = { # ключи (первое слово) в нижнем регистре!
     '@samcrypto_master': '@ParamPam',

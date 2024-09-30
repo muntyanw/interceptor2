@@ -32,11 +32,12 @@ def replace_words(text, channel_id):
     
     moderation_if_image = channel_info.get('moderation_if_image', False)
     auto_moderation_and_send_text_message = channel_info.get('auto_moderation_and_send_text_message', False)
+    channels_to_send = channel_info.get('channels_to_send', False)
     
     logger.info(f"[replace_words]  moderation_if_image = {moderation_if_image}")
     logger.info(f"[replace_words]  auto_moderation_and_send_text_message = {auto_moderation_and_send_text_message}")
     
-    return text, moderation_if_image, auto_moderation_and_send_text_message
+    return text, moderation_if_image, auto_moderation_and_send_text_message, channels_to_send
 
 def extract_original_id(chat_id):
     # Преобразовываем chat_id в строку для удобства обработки
