@@ -2,7 +2,6 @@ from asgiref.sync import sync_to_async
 import asyncio
 from telethon import TelegramClient, events, types
 from telethon.sessions import StringSession
-from . import ses
 from . import channels
 from . import utils
 import os
@@ -14,6 +13,8 @@ from collections import deque, defaultdict
 import hashlib
 import time
 from telethon.tl.custom import Button
+from telethon.tl.custom.messagebutton import MessageButton
+
 
 handler_registered = False
 
@@ -26,10 +27,35 @@ message_parts = defaultdict(lambda: {'files': [], 'text': None, 'sender_name': N
 COLLECT_TIMEOUT = 2  # Таймаут ожидания всех частей сообщения
 
 # Создание клиента
-client = TelegramClient(ses.session, channels.api_id, channels.api_hash,
+client = TelegramClient(channels.name_session_client, channels.api_id, channels.api_hash,
                         connection_retries=10,  # Количество попыток переподключения
                         timeout=60  # Тайм-аут ожидания в секундах
                        )
+
+client_bot = None
+
+async def start_client_bot():
+    global client_bot
+    try:
+        # Инициализируем клиент бота
+        client_bot = TelegramClient(
+            channels.name_session_bot,
+            channels.api_id,
+            channels.api_hash,
+            connection_retries=10,  # Количество попыток переподключения
+            timeout=60  # Тайм-аут ожидания в секундах
+        )
+        
+        await client_bot.start(bot_token=channels.bot_token)  # Не забываем использовать await
+        
+        logger.info("[start_client] Старт Клієнт бот")
+        
+        # Получаем информацию о боте
+        await utils.get_bot_info(client_bot)
+
+    except Exception as e:
+        logger.error(f"Ошибка при запуске клиента: {e}")
+
 
 async def send_message_to_channels(message_text, files, reply_to_msg_id=None, buttons=None):
     logger.info(f"[send_message_to_channels] Попытка отправки сообщения: {message_text} с файлами: {files}")
@@ -44,14 +70,27 @@ async def send_message_to_channels(message_text, files, reply_to_msg_id=None, bu
         return
     sent_messages.append(unique_id)  # Добавление уникального идентификатора в очередь
     for channel in channels.channels_to_send:
-        entity = await client.get_entity(PeerChannel(channel))
+        logger.info(f"[send_message_to_channels] Старт отправки для канала channel = {channel}")
         try:
             if files:
-                logger.info(f"[send_message_to_channels] Отправка файла в канал: {channel}, файлы: {files}, buttons: {buttons}")
-                await client.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, buttons=buttons)
+                if buttons:
+                    logger.info(f"[send_message_to_channels] Отправка файла ботом в канал: {channel}, файлы: {files}, buttons: {buttons}")
+                    entity = await client_bot.get_entity(channel)
+                    await client_bot.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, buttons=buttons) #
+                else:    
+                    logger.info(f"[send_message_to_channels] Отправка файла клієнтом в канал: {channel}, файлы: {files}")
+                    entity = await client.get_entity(channel)
+                    await client.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id)
             else:
-                logger.info(f"[send_message_to_channels] Отправка сообщения в канал: {channel}, buttons: {buttons}")
-                await client.send_message(entity, message_text, reply_to=reply_to_msg_id, buttons=buttons)
+                if buttons:
+                    logger.info(f"[send_message_to_channels] Отправка сообщения в канал ботом: {channel}, buttons: {buttons}")
+                    entity = await client_bot.get_entity(channel)
+                    await client_bot.send_message(entity, message_text, reply_to=reply_to_msg_id, buttons=buttons) #
+                else:
+                    logger.info(f"[send_message_to_channels] Отправка сообщения в канал клієнтом: {channel}")
+                    entity = await client.get_entity(channel)
+                    await client.send_message(entity, message_text, reply_to=reply_to_msg_id)
+                    
         except FloodWaitError as e:
             logger.warning(f"[send_message_to_channels] FloodWaitError: {e}. Ожидание {e.seconds} секунд.")
             await asyncio.sleep(e.seconds)  # Ожидание перед повторной отправкой
@@ -59,7 +98,6 @@ async def send_message_to_channels(message_text, files, reply_to_msg_id=None, bu
             logger.error(f"[send_message_to_channels] Ошибка при отправке сообщения: {e}")
     logger.info("[send_message_to_channels] Завершение отправки сообщений и файлов.")
     
-
 async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
     from .models import AutoSendMessageSetting
     """Обрабатывает сообщение из `message_parts` после таймаута."""
@@ -108,6 +146,7 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
         logger.error(f"KeyError: Не удалось удалить части сообщения для {chat_id}, возможно, они уже были удалены.")
 
 async def start_client():
+    
     global handler_registered
     download_directory = "storage/"
     if not os.path.exists(download_directory):
@@ -118,13 +157,14 @@ async def start_client():
         try:
             if not handler_registered:
                 logger.info(f"[start_client] Регистрируем обработчик")
-                #await client.start(bot_token=channels.bot_token)
                 await client.connect()
                 if not await client.is_user_authorized():
                     logger.info("[start_client] Клиент не авторизован, завершаем процесс")
                     return
-                ses.save_session(ses.session_name, client.session.save())
                 logger.info("[start_client] Клиент Telethon успешно подключен и авторизован")
+                
+                await start_client_bot()
+                
                 chat_ids = list(channels.channels_to_listen.keys())
 
                 @client.on(events.NewMessage(chats=chat_ids))
@@ -134,33 +174,22 @@ async def start_client():
                     sender_name = getattr(sender, 'first_name', 'Unknown') if hasattr(sender, 'first_name') else getattr(sender, 'title', 'Unknown')
                     
                     reply_to_msg_id = None
-                                       
-                    #buttons = [
-                    #    [Button.url('Google', 'https://www.google.com')],
-                    #    [Button.url('YouTube', 'https://www.youtube.com')]
-                    #]
-                    #buttons=[[Button.inline('Left'), Button.inline('Right')], [Button.url('Check this site!', 'https://example.com')]]
-                    buttons = None
-                    
+  
+                    buttons = await event.get_buttons()
+
+                    if buttons:
+                        # Логируем получение кнопок
+                        logger.info(f"[handler] Получены кнопки: {buttons}")
+                        buttons = utils.formatted_buttons(buttons)
+                            
                     if event.is_reply:
                         original_message = await event.get_reply_message()
                         logger.info(f"[handler] Сообщение от {chat_id} является ответом на сообщение ID {original_message.id}.")
                         # Set the reply_to_msg_id to the ID of the original message
                         reply_to_msg_id = original_message.id
                         
-                     # Проверка на наличие инлайн-кнопок в сообщении
+                     
                     message = event.message
-                    if message.reply_markup:  # Проверяем наличие кнопок
-                        if isinstance(message.reply_markup, types.ReplyInlineMarkup):
-                            print("Inline кнопки:")
-                            for row in message.reply_markup.rows:
-                                for button in row.buttons:
-                                    print(f"Текст кнопки: {button.text}")
-                        elif isinstance(message.reply_markup, types.ReplyKeyboardMarkup):
-                            print("Обычные кнопки:")
-                            for row in message.reply_markup.rows:
-                                for button in row.buttons:
-                                    print(f"Текст кнопки: {button.text}")
 
                     if message.media:
                         file_path = await message.download_media(file=download_directory)

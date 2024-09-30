@@ -8,6 +8,10 @@ from . import channels
 import numpy as np
 import os
 from telethon import Button
+import hashlib
+from telethon.tl.custom import Button
+from telethon.tl.custom.messagebutton import MessageButton
+
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +21,7 @@ def is_image_file(file_path):
     return ext in image_extensions
 
 def replace_words(text, channel_id):
+    logger.info(f"[replace_words] channel_id =  {channel_id}")
     channel_info = channels.channels_to_listen.get(channel_id, {})
     replacements = channel_info.get('replacements', {})
     
@@ -201,39 +206,85 @@ def find_and_replace_in_images(image_paths, template_image_path, replacement_ima
 
     return processed_paths
 
+def formatted_buttons(buttons):
+    # Преобразуем кнопки в нужный формат
+    formatted_buttons = []
+    for row in buttons:
+        button_row = []
+        for btn in row:
+            # Логируем тип кнопки перед обработкой
+            logger.info(f"[handler] Обрабатываем кнопку: {btn}")
+            
+            # Проверяем, если это объект MessageButton
+            if isinstance(btn, MessageButton):
+                # Для URL-кнопок
+                if btn.url:
+                    button_row.append(Button.url(btn.text, btn.url))
+                    logger.info(f"[handler] Преобразована URL-кнопка: текст={btn.text}, url={btn.url}")
+                # Для инлайн-кнопок с callback
+                elif btn.data:
+                    button_row.append(Button.inline(btn.text, btn.data))
+                    logger.info(f"[handler] Преобразована инлайн-кнопка: текст={btn.text}, data={btn.data}")
+                else:
+                    logger.warning(f"[handler] Неизвестный тип кнопки: {btn}")
+            else:
+                logger.warning(f"[handler] Неизвестный тип кнопки: {type(btn).__name__}")
+
+        if button_row:
+            logger.info(f"[handler] Добавлена строка кнопок: {button_row}")
+            formatted_buttons.append(button_row)
+
+    # Логируем результат преобразования кнопок
+    logger.info(f"[handler] Преобразованные кнопки: {formatted_buttons}")
+    return formatted_buttons
+
 def update_buttons(buttons, replacements):
     """
     Метод для обновления ссылок на кнопках в соответствии с текстом кнопки.
 
     :param buttons: Список строк с инлайн-кнопками (список списков кнопок).
     :param replacements: Словарь с соответствием текстов кнопок и новых ссылок, например:
-                         {'Текущая кнопка': 'https://новая-ссылка.com'}
+                         {'Текущая кнопка': 'https://новая-ссылка.com' или 'callback_data': 'new_callback_data'}
     :return: Обновленный список строк с кнопками.
     """
     updated_buttons = []
 
-    # Проходим по строкам кнопок
+    logger.info(f"[update_buttons] Начинаем обновление кнопок. buttons = {buttons}")
+
     if buttons is not None:
         for row in buttons:
             updated_row = []
-            
-            # Проходим по каждой кнопке в строке (в строке находится список кнопок)
+            logger.info(f"[update_buttons] Обрабатываем строку кнопок: {row}")
+
             for button in row:
+                logger.info(f"[update_buttons] Обрабатываем кнопку: {button}")
+
                 if hasattr(button, 'url'):
-                    # Если текст кнопки есть в replacements, заменяем ссылку
+                    logger.info(f"[update_buttons] Кнопка {button.text} является URL-кнопкой.")
                     if button.text in replacements:
                         new_url = replacements[button.text]
+                        logger.info(f"[update_buttons] Заменяем URL для кнопки '{button.text}' на '{new_url}'.")
                         updated_row.append(Button.url(button.text, new_url))
                     else:
-                        # Если текст кнопки не найден в replacements, оставляем кнопку без изменений
+                        logger.info(f"[update_buttons] Текст кнопки '{button.text}' не найден в replacements. Оставляем без изменений.")
+                        updated_row.append(button)
+                elif hasattr(button, 'data'):
+                    logger.info(f"[update_buttons] Кнопка {button.text} является инлайн-кнопкой.")
+                    if button.text in replacements:
+                        new_data = replacements[button.text]
+                        logger.info(f"[update_buttons] Заменяем данные для кнопки '{button.text}' на '{new_data}'.")
+                        updated_row.append(Button.inline(button.text, new_data))
+                    else:
+                        logger.info(f"[update_buttons] Текст кнопки '{button.text}' не найден в replacements. Оставляем без изменений.")
                         updated_row.append(button)
                 else:
-                    # Если кнопка не является URL-кнопкой, добавляем её без изменений
+                    logger.info(f"[update_buttons] Тип кнопки не поддерживается. Оставляем кнопку '{button.text}' без изменений.")
                     updated_row.append(button)
-            
-            # Добавляем обновленную строку кнопок в результирующий список
+
+            logger.info(f"[update_buttons] Добавляем обновлённую строку кнопок: {updated_row}")
             updated_buttons.append(updated_row)
 
+    logger.info("[update_buttons] Обновление кнопок завершено.")
     return updated_buttons
 
 def hash_file(file_path):
@@ -243,3 +294,45 @@ def hash_file(file_path):
         buf = f.read()
         hasher.update(buf)
     return hasher.hexdigest()
+
+async def get_bot_info(client):
+    # Fetch the bot's info
+    me = await client.get_me()
+    print(f"Bot's Name: {me.username}")
+    
+def check_file(file_path):
+    # Проверяем, существует ли файл
+    if os.path.isfile(file_path):
+        # Проверяем, не пустой ли файл
+        if os.path.getsize(file_path) > 0:
+            print(f"Файл '{file_path}' существует и не пустой.")
+            return True
+        else:
+            print(f"Файл '{file_path}' существует, но он пустой.")
+            return False
+    else:
+        print(f"Файл '{file_path}' не существует.")
+        return False
+    
+def remove_file(file_path):
+    try:
+        # Проверяем, существует ли файл
+        if os.path.isfile(file_path):
+            # Удаляем файл
+            os.remove(file_path)
+            print(f"Файл '{file_path}' успешно удалён.")
+        else:
+            print(f"Файл '{file_path}' не существует.")
+    except Exception as e:
+        print(f"Ошибка при удалении файла: {e}")
+
+# Получение пути к файлу сессии
+def get_session_web_file_path(request, settings):
+    session_key = request.session.session_key
+    if not session_key:
+        logger.error("[get_session_file_path] Не удалось получить session_key.")
+        return None
+
+    session_file_path = os.path.join(settings.SESSION_FILE_PATH, session_key)
+    logger.info(f"[get_session_file_path] Путь к файлу сессии веб: {session_file_path}")
+    return session_file_path

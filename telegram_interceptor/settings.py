@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'btp',
         'USER': 'root',
-        'PASSWORD': '!A3z5puU68G*',#
+        'PASSWORD': '88888888',# !A3z5puU68G*
         'HOST': '127.0.0.1',
         'PORT': '3306',  # по умолчанию 3306 для MySQL
     }
@@ -140,11 +140,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SESSION_NAME = "interceptor_session" 
-API_ID = 24364263  # Замените на ваш API ID
-API_HASH = "1f03c4f0e8617dd5fe4f16e9d629f47c" 
-
-
 ASGI_APPLICATION = 'telegram_interceptor.asgi.application'
 
 REDISHOST = '127.0.0.1' #'localhost'
@@ -164,6 +159,12 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # В Django settings.py
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SESSION_FILE_PATH = os.path.join(BASE_DIR, 'interceptor', 'sessions')
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 
 
 
