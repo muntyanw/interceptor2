@@ -13,14 +13,23 @@ channels_to_listen = {
         'replacements': {
             'bingx': 'google',
             'Bingx': 'Google',
-            'SamCrypto_Master': 'reach_me_here',
+            'SamCrypto_Master': 'parampam',
         },
     },
-        
+    2204843457: { #Intertest
+        'moderation_if_image': False,
+        'auto_moderation_and_send_text_message': True, #если это значение труе то будет производить автозамену и отсылать, если фэлз будет делать автозамену и отсылать на сайт человеку
+        'replacements': {
+            'bingx': 'google',
+            'Bingx': 'Google',
+            'SamCrypto_Master': 'parampam',
+        },
+    },
+     
 }
 
 #каналы куда отсылаем каналы с -100
-channels_to_send = [-1002313168509] #, 2170620330
+channels_to_send = [-1002353873572] #, 2170620330
 
 replacements_in_images = { # ключи (первое слово) в нижнем регистре!
     '@samcrypto_master': '@reach_me_here',

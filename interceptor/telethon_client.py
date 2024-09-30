@@ -70,7 +70,7 @@ async def start_client_bot():
     except Exception as e:
         logger.error(f"Ошибка при запуске клиента: {e}")
 
-async def send_message_to_channels(message_text, files, reply_to_msg_id=None, buttons=None):
+async def send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id=None, buttons=None):
     logger.info(f"[send_message_to_channels] Попытка отправки сообщения: {message_text} с файлами: {files}")
     await asyncio.sleep(1)
     # Создаем уникальный идентификатор сообщения/файла
@@ -82,7 +82,7 @@ async def send_message_to_channels(message_text, files, reply_to_msg_id=None, bu
         logger.warning("[send_message_to_channels] Сообщение или файл уже были отправлены, пропуск отправки.")
         return
     sent_messages.append(unique_id)  # Добавление уникального идентификатора в очередь
-    for channel in channels.channels_to_send:
+    for channel in channels_to_send:
         logger.info(f"[send_message_to_channels] Старт отправки для канала channel = {channel}")
         try:
             if files:
@@ -125,11 +125,12 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
     except Exception as e:
         logger.error(f"Failed to get setting: {e}")
     setting = None  # Или обработайте ошибку соответствующим образом
+    
+    modified_message, moderation_if_image, auto_moderation_and_send_text_message, channels_to_send = utils.replace_words(message_text, chat_id)
 
     if setting and setting.is_enabled:
-        await send_message_to_channels(message_text, files, reply_to_msg_id, buttons)
+        await send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id, buttons)
     else:
-        modified_message, moderation_if_image, auto_moderation_and_send_text_message = utils.replace_words(message_text, chat_id)
         logger.error(f"[process_message] moderation_if_image: {moderation_if_image}, file_paths: {files}, moderation_if_image and file_paths: {moderation_if_image and files}, modified_message: {modified_message}")
 
         if (moderation_if_image and files) or not auto_moderation_and_send_text_message:
@@ -146,6 +147,7 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
         else:
             logger.info(f"[process_message] Автоматическое перенаправление в канал")
             await send_message_to_channels(
+                channels_to_send, 
                 modified_message, 
                 utils.replace_words_in_images(files, channels.replacements_in_images), 
                 reply_to_msg_id,
