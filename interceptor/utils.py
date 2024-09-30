@@ -16,9 +16,13 @@ from telethon.tl.custom.messagebutton import MessageButton
 logger = logging.getLogger(__name__)
 
 def is_image_file(file_path):
-    image_extensions = ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.tiff']
+    # Добавляем проверку на None
+    if file_path is None:
+        logger.error("[is_image_file] Путь к файлу не должен быть None.")
+        return False
+
     ext = os.path.splitext(file_path)[1].lower()
-    return ext in image_extensions
+    return ext in ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.tiff']
 
 def replace_words(text, channel_id):
     logger.info(f"[replace_words] channel_id =  {channel_id}")
