@@ -26,26 +26,40 @@ sent_messages = deque(maxlen=MAX_SENT_MESSAGES)  # Очередь с огран�
 message_parts = defaultdict(lambda: {'files': [], 'text': None, 'sender_name': None, 'start_time': None})
 COLLECT_TIMEOUT = 2  # Таймаут ожидания всех частей сообщения
 
-# Создание клиента
-client = TelegramClient(channels.name_session_client, channels.api_id, channels.api_hash,
-                        connection_retries=10,  # Количество попыток переподключения
-                        timeout=60  # Тайм-аут ожидания в секундах
-                       )
-
+client = None
 client_bot = None
+
+async def createClients():
+    global client
+    global client_bot
+    logger.info("[createClients] Проверяем законекчен ли клиент.")
+    if client is None or not client.is_connected():
+        logger.info("[createClients] Создаем клиент.")
+        client = TelegramClient(channels.name_session_client, channels.api_id, channels.api_hash,
+                                connection_retries=10,  # Количество попыток переподключения
+                                timeout=60  # Тайм-аут ожидания в секундах
+                            )
+        await client.connect()
+    else:
+        logger.info("[createClients] Клиент есть и законекчен.")
+
+    logger.info("[createClients] Проверяем законекчен ли бот клиент.")
+    if client is None or not client.is_connected():   
+        logger.info("[createClients] Создаем бот клиент.")
+        client_bot = TelegramClient(
+                channels.name_session_bot,
+                channels.api_id,
+                channels.api_hash,
+                connection_retries=10,  # Количество попыток переподключения
+                timeout=60  # Тайм-аут ожидания в секундах
+            )
+        await client_bot.connect()
+    else:
+        logger.info("[createClients] Клиент есть и законекчен.")
 
 async def start_client_bot():
     global client_bot
     try:
-        # Инициализируем клиент бота
-        client_bot = TelegramClient(
-            channels.name_session_bot,
-            channels.api_id,
-            channels.api_hash,
-            connection_retries=10,  # Количество попыток переподключения
-            timeout=60  # Тайм-аут ожидания в секундах
-        )
-        
         await client_bot.start(bot_token=channels.bot_token)  # Не забываем использовать await
         
         logger.info("[start_client] Старт Клієнт бот")
@@ -55,7 +69,6 @@ async def start_client_bot():
 
     except Exception as e:
         logger.error(f"Ошибка при запуске клиента: {e}")
-
 
 async def send_message_to_channels(message_text, files, reply_to_msg_id=None, buttons=None):
     logger.info(f"[send_message_to_channels] Попытка отправки сообщения: {message_text} с файлами: {files}")
@@ -146,13 +159,15 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
         logger.error(f"KeyError: Не удалось удалить части сообщения для {chat_id}, возможно, они уже были удалены.")
 
 async def start_client():
-    
     global handler_registered
     download_directory = "storage/"
     if not os.path.exists(download_directory):
         os.makedirs(download_directory)
     max_retries = 5
     delay = 10  # Задержка между попытками в секундах
+    
+    await createClients()
+    
     for attempt in range(max_retries):
         try:
             if not handler_registered:

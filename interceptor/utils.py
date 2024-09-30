@@ -320,11 +320,11 @@ def remove_file(file_path):
         if os.path.isfile(file_path):
             # Удаляем файл
             os.remove(file_path)
-            print(f"Файл '{file_path}' успешно удалён.")
+            logger.info(f"Файл '{file_path}' успешно удалён.")
         else:
-            print(f"Файл '{file_path}' не существует.")
+            logger.info(f"Файл '{file_path}' не существует.")
     except Exception as e:
-        print(f"Ошибка при удалении файла: {e}")
+        logger.info(f"Ошибка при удалении файла: {e}")
 
 # Получение пути к файлу сессии
 def get_session_web_file_path(request, settings):
