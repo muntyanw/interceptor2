@@ -2,3 +2,5 @@ venv/
 storage/
 .venv/
 
+sessionTC.session
+sessionTC.session-journal
