@@ -421,6 +421,7 @@
                 window.location.reload(); // Refresh the page after logout
             } else {
                 console.error('Logout failed');
+                window.location.href = '/';
             }
         })
         .catch(error => console.error('Error:', error));

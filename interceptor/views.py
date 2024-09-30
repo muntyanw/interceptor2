@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from .models import AutoSendMessageSetting, TelegramMessage
 from django.conf import settings
 from telethon.sessions import SQLiteSession
-from .telethon_client import client, start_client
+from .telethon_client import client, client_bot, createClients
 import asyncio
 from django.http import HttpResponse
 
@@ -22,7 +22,7 @@ async def message_list_and_edit(request, edit_pk=None):
     telethon_client_task_running = cache.get('telethon_client_task_running')
     
     logger.info("[message_list_and_edit] Перевірка client.connect")
-    if not await client.is_user_authorized() or not telethon_client_task_running:
+    if not client or not await client.is_user_authorized() or not telethon_client_task_running:
         return redirect("/")
 
     # Получение списка сообщений и редактируемого сообщения асинхронно
@@ -104,15 +104,16 @@ async def get_contacts_and_channels(request):
         logger.error(f"[get_contacts_and_channels] Непредвиденная ошибка: {str(e)}")
         return JsonResponse({"error": str(e)}, status=500)
     
-    
 # Запуск клиента
 async def start_client_view(request):
     logger.info("[start_client_view] Запуск клиента для авторизации.")
+    if client is None or not await client.is_user_authorized():
+            logger.info("[start_client_view] Клиент разлогинен создаем заново.")
+            await createClients()
+            
+            
     if client:    
         try:
-            logger.info("[start_client_view] Попытка подключения клиента.")
-            await client.connect()
-
             # Проверка, авторизован ли клиент
             if not await client.is_user_authorized():
                 logger.warning("[start_client_view] Клиент не авторизован, перенаправляем на страницу авторизации.")
@@ -122,6 +123,9 @@ async def start_client_view(request):
                 logger.info("[start_client_view] Установлен флаг telethon_client_task_running в кэш.")
                 # Перенаправление к списку сообщений
                 return redirect("message_list_and_edit")
+            
+            logger.info("[start_client_view] Попытка подключения клиента.")
+            await client.connect()
 
         except errors.SessionPasswordNeededError:
             logger.warning("[start_client_view] Требуется двухфакторная аутентификация, перенаправляем.")
@@ -141,25 +145,26 @@ async def check_authorization(client):
     return await client.is_user_authorized()
 
 async def telegram_auth(request):
+    global client
+    global client_bot
+    
     logger.info("[telegram_auth] Запрос на авторизацию получен.")
     
     if request.method == "POST":
         phone = request.POST.get("phone")
         code = request.POST.get("code")
         logger.info(f"[telegram_auth] Телефон: {phone}, Код: {code}")
-
-        # Файл для хранения сессии
-        session_web_file = utils.get_session_web_file_path(request, settings)
+        
+        # Проверка на подключение
+        if not client.is_connected():
+            logger.warning("[telegram_auth] Клиент был отключен, переподключаемся...")
+            await createClients()
 
         if phone and not code:
             try:
-                # Проверка на подключение
-                if not client.is_connected():
-                    logger.warning("[telegram_auth] Клиент был отключен, переподключаемся...")
-                    await client.connect()
-
                 # Отправляем запрос на получение кода
                 result = await client.send_code_request(phone)
+                client.connect()
                 logger.info(f"[telegram_auth] Код авторизации отправлен на номер: {phone}")
 
                 # Сохраняем phone_code_hash в сессии Django
@@ -239,12 +244,28 @@ def update_auto_send_setting(request):
         logger.info(f"[update_auto_send_setting] Настройки обновлены: {setting.is_enabled}")
     return redirect('message_list_and_edit')
 
-def logout_view(request):
+async def logout_view(request):
+    global client
+    global client_bot
+    
+    logger.info("[logout_view] Вызов метода logout.")
     if request.method == 'POST':
+        logger.info("[logout_view] is POST.")
         try:
-            utils.remove_file(channels.name_session_client)
-            logger.info("[logout_view] Клиентская сессия удалена.")
-            return JsonResponse({'status': 'success'})
+            project_directory = getattr(settings, 'BASE_DIR', None)
+            if project_directory is None:
+                raise ValueError("Параметр 'project_directory' не определен в settings.py")
+            else:
+                #await client.log_out()
+                #await client_bot.log_out()
+                #client = None
+                #client_bot = None
+                utils.remove_file(settings.BASE_DIR + '/' + channels.name_session_client + ".session")
+                utils.remove_file(settings.BASE_DIR + '/' + channels.name_session_client + ".session-journal")
+                utils.remove_file(settings.BASE_DIR + '/' + channels.name_session_bot + ".session")
+                utils.remove_file(settings.BASE_DIR + '/' + channels.name_session_bot + ".session-journal")
+                logger.info("[logout_view] Клиентская сессия удалена.")
+                return JsonResponse({'status': 'success'})
         except Exception as e:
             logger.error(f"[logout_view] Ошибка при удалении сессии: {str(e)}")
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
