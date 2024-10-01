@@ -1,4 +1,3 @@
-
 import cv2
 import pytesseract
 from pytesseract import Output
@@ -11,7 +10,6 @@ from telethon import Button
 import hashlib
 from telethon.tl.custom import Button
 from telethon.tl.custom.messagebutton import MessageButton
-
 
 logger = logging.getLogger(__name__)
 

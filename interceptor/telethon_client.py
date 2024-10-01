@@ -126,13 +126,12 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
         logger.error(f"Failed to get setting: {e}")
     setting = None  # Или обработайте ошибку соответствующим образом
     
-    modified_message, moderation_if_image, auto_moderation_and_send_text_message, channels_to_send = utils.replace_words(message_text, chat_id)
-
     if setting and setting.is_enabled:
+        logger.info(f"[process_message] setting.is_enabled = true Отправка сообщения без модерирования!")
         await send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id, buttons)
     else:
-        logger.error(f"[process_message] moderation_if_image: {moderation_if_image}, file_paths: {files}, moderation_if_image and file_paths: {moderation_if_image and files}, modified_message: {modified_message}")
-
+        modified_message, moderation_if_image, auto_moderation_and_send_text_message, channels_to_send = utils.replace_words(message_text, chat_id)
+        logger.info(f"[process_message] moderation_if_image: {moderation_if_image}, file_paths: {files}, moderation_if_image and file_paths: {moderation_if_image and files}, modified_message: {modified_message}")
         if (moderation_if_image and files) or not auto_moderation_and_send_text_message:
             logger.info(f"[process_message] Отправка сообщения через WebSocket на фронт человеку")
             channel_layer = get_channel_layer()
