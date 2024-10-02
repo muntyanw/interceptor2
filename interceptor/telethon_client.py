@@ -71,7 +71,7 @@ async def start_client_bot():
         logger.error(f"Ошибка при запуске клиента: {e}")
 
 async def send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id=None, buttons=None):
-    logger.info(f"[send_message_to_channels] Попытка отправки сообщения: {message_text} с файлами: {files}")
+    logger.info(f"[send_message_to_channels] Попытка отправки сообщения")
     await asyncio.sleep(1)
     # Создаем уникальный идентификатор сообщения/файла
     unique_id = message_text if message_text else ""

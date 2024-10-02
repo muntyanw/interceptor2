@@ -4,3 +4,4 @@ storage/
 
 sessionTC.session
 sessionTC.session-journal
+log.log

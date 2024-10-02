@@ -36,9 +36,6 @@ def replace_words(text, channel_id):
     auto_moderation_and_send_text_message = channel_info.get('auto_moderation_and_send_text_message', False)
     channels_to_send = channel_info.get('channels_to_send', False)
     
-    logger.info(f"[replace_words]  moderation_if_image = {moderation_if_image}")
-    logger.info(f"[replace_words]  auto_moderation_and_send_text_message = {auto_moderation_and_send_text_message}")
-    
     return text, moderation_if_image, auto_moderation_and_send_text_message, channels_to_send
 
 def extract_original_id(chat_id):
@@ -101,7 +98,6 @@ def replace_words_in_images(file_paths, replacements_dict):
         n_boxes = len(d['text'])
         for i in range(n_boxes):
             word = d['text'][i].strip().lower()  # Убираем лишние пробелы и приводим к нижнему регистру
-            logger.info(f"[replace_words_in_images] word: {word}")
             if word:
                 logger.info(f"[replace_words_in_images] Распознано слово: {word}")
                 # Проверяем наличие слова в словаре замены
@@ -252,9 +248,8 @@ def update_buttons(buttons, replacements):
     """
     updated_buttons = []
 
-    logger.info(f"[update_buttons] Начинаем обновление кнопок. buttons = {buttons}")
-
     if buttons is not None:
+        logger.info(f"[update_buttons] Начинаем обновление кнопок. buttons = {buttons}")
         for row in buttons:
             updated_row = []
             logger.info(f"[update_buttons] Обрабатываем строку кнопок: {row}")
@@ -286,8 +281,10 @@ def update_buttons(buttons, replacements):
 
             logger.info(f"[update_buttons] Добавляем обновлённую строку кнопок: {updated_row}")
             updated_buttons.append(updated_row)
-
-    logger.info("[update_buttons] Обновление кнопок завершено.")
+        logger.info("[update_buttons] Обновление кнопок завершено.")
+    else:
+       logger.info(f"[update_buttons] Нема кнопок.") 
+    
     return updated_buttons
 
 def hash_file(file_path):

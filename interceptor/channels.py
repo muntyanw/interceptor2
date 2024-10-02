@@ -14,10 +14,20 @@ channels_to_listen = {
             'bingx': 'google',
             'Bingx': 'Google',
             'SamCrypto_Master': 'reach_me_here',
+            'Sam':'reach_me_here',
         },
         'channels_to_send': [-1002313168509] #каналы куда отсылаем каналы с -100
     },
-        
+     2009977255: { #Victor Trader
+        'moderation_if_image': False,
+        'auto_moderation_and_send_text_message': True, #если это значение труе то будет производить автозамену и отсылать, если фэлз будет делать автозамену и отсылать на сайт человеку
+        'replacements': {
+            'bingx': 'google',
+            'Bingx': 'Google',
+            'SamCrypto_Master': 'reach_me_here',
+        },
+        'channels_to_send': [-1002291645140] #каналы куда отсылаем каналы с -100
+    },   
 }
 
 
@@ -27,9 +37,9 @@ replacements_in_images = { # ключи (первое слово) в нижне�
 
 # # Словарь с заменами (текущий текст кнопки -> новая ссылка)
 replacements_in_buttons = {
-     'Google': 'https://www.binance.com',
-     'Announcements': 'https://www.binance.com',
-     'Join Community': 'https://www.binance.com',
+     'OPEN BROKER': 'https://www.binance.com',
+     'CONTACT SUPPORT': 'https://www.binance.com',
+     'SHARE RESULT': 'https://www.binance.com',
      'FAQ': 'https://www.binance.com'
  }
 
