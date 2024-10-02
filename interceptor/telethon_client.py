@@ -34,6 +34,8 @@ message_queue = deque()
 # Флаг для отслеживания обработки
 is_processing = False
 
+download_directory = "storage/"
+
 async def createClients():
     global client
     global client_bot
@@ -166,81 +168,85 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
         logger.error(f"KeyError: Не удалось удалить части сообщения для {chat_id}, возможно, они уже были удалены.")
 
 # Функция для добавления сообщений в очередь
-async def add_to_queue(event, chat_id, reply_to_msg_id, buttons):
+async def add_to_queue(event):
     logger.info(f"[add_to_queue] Додаємо месседж до черги. event.id: {event.id}")
-    message_queue.append((event))
+    message_queue.append(event)
     await process_queue()
+
+# Обработка одного сообщения
+async def process_single_message(event):
+    chat_id = utils.extract_original_id(event.chat_id)
+    sender = await event.get_sender()
+    sender_name = getattr(sender, 'first_name', 'Unknown') if hasattr(sender, 'first_name') else getattr(sender, 'title', 'Unknown')
+    
+    reply_to_msg_id = None
+
+    buttons = await event.get_buttons()
+
+    if buttons:
+        logger.info(f"[handler] Получены кнопки")
+        buttons = utils.formatted_buttons(buttons)
+            
+    if event.is_reply:
+        original_message = await event.get_reply_message()
+        logger.info(f"[handler] Сообщение от {chat_id} является ответом на сообщение ID {original_message.id}.")
+        # Set the reply_to_msg_id to the ID of the original message
+        reply_to_msg_id = original_message.id
+        
+        
+    message = event.message
+
+    if message.media:
+        file_path = await message.download_media(file=download_directory)
+        if message_parts[chat_id]['start_time'] is None:
+            # Запоминаем время первого сообщения с файлом
+            message_parts[chat_id]['start_time'] = time.time()
+            message_parts[chat_id]['files'].append(file_path)
+            message_parts[chat_id]['text'] = message.text
+            logger.info(f"[handler] Первое сообщение с файлом получено от {chat_id}. Запускаем таймер.")
+            await asyncio.sleep(COLLECT_TIMEOUT)
+            await process_message(chat_id, reply_to_msg_id, buttons)
+        else:
+            logger.info(f"[handler] Дополнительный файл получен от {chat_id}. Добавляем к уже полученным файлам.")
+            message_parts[chat_id]['files'].append(file_path)
+            if message.text:
+                message_parts[chat_id]['text'] += message.text
+    else:
+        if message.text:
+            if message_parts[chat_id]['start_time']: #если ожиндания сборщика
+                message_parts[chat_id]['start_time'] = time.time()
+                await asyncio.sleep(COLLECT_TIMEOUT)  #подождем когда уйдет прошлое
+            message_parts[chat_id]['text'] = message.text
+            # Обработка сообщения сразу если есть текст
+            logger.info(f"[handler] Текстовое сообщение получено от {chat_id}. Немедленная обработка.")
+            await process_message(chat_id, reply_to_msg_id, buttons)
     
 # Функция для обработки сообщений из очереди
 async def process_queue():
     global is_processing
 
-    # Если уже обрабатываем сообщение, ждем завершения
     if is_processing:
+        logger.info(f"[process_queue] Вже йде обробка. Виходим.")
         return
 
-    # Устанавливаем флаг, что началась обработка
     is_processing = True
+    logger.info(f"[process_queue] Початок обробкі чергі.")
 
+    tasks = []
     while message_queue:
-        # Получаем следующее сообщение из очереди
         event = message_queue.popleft()
+        logger.info(f"[process_queue] Наступний меседж із чергі. event.id:{event.id}")
 
-        chat_id = utils.extract_original_id(event.chat_id)
-        sender = await event.get_sender()
-        sender_name = getattr(sender, 'first_name', 'Unknown') if hasattr(sender, 'first_name') else getattr(sender, 'title', 'Unknown')
-        
-        reply_to_msg_id = None
-
-        buttons = await event.get_buttons()
-
-        if buttons:
-            # Логируем получение кнопок
-            logger.info(f"[handler] Получены кнопки")
-            buttons = utils.formatted_buttons(buttons)
-                
-        if event.is_reply:
-            original_message = await event.get_reply_message()
-            logger.info(f"[handler] Сообщение от {chat_id} является ответом на сообщение ID {original_message.id}.")
-            # Set the reply_to_msg_id to the ID of the original message
-            reply_to_msg_id = original_message.id
+        # Запускаем обработку каждого сообщения как отдельную задачу
+        tasks.append(asyncio.create_task(process_single_message(event)))
             
-            
-        message = event.message
-
-        if message.media:
-            file_path = await message.download_media(file=download_directory)
-            if message_parts[chat_id]['start_time'] is None:
-                # Запоминаем время первого сообщения с файлом
-                message_parts[chat_id]['start_time'] = time.time()
-                message_parts[chat_id]['files'].append(file_path)
-                message_parts[chat_id]['text'] = message.text
-                logger.info(f"[handler] Первое сообщение с файлом получено от {chat_id}. Запускаем таймер.")
-                # Запускаем таймер для обработки сообщения после COLLECT_TIMEOUT
-                await asyncio.sleep(COLLECT_TIMEOUT)
-                await process_message(chat_id, reply_to_msg_id, buttons)
-            else:
-                logger.info(f"[handler] Дополнительный файл получен от {chat_id}. Добавляем к уже полученным файлам.")
-                message_parts[chat_id]['files'].append(file_path)
-                if message.text:
-                    message_parts[chat_id]['text'] += message.text
-        else:
-            if message.text:
-                if message_parts[chat_id]['start_time']:#если ожиндания сборщика
-                    message_parts[chat_id]['start_time'] = time.time()
-                    await asyncio.sleep(COLLECT_TIMEOUT)  #подождем когда уйдет прошлое
-                message_parts[chat_id]['text'] = message.text
-                # Обработка сообщения сразу если есть текст
-                logger.info(f"[handler] Текстовое сообщение получено от {chat_id}. Немедленная обработка.")
-                await process_message(chat_id, reply_to_msg_id, buttons)
-                return
-            
-        # Убираем флаг после завершения обработки
-        is_processing = False
+    # Убираем флаг после завершения обработки
+    is_processing = False
     
 async def start_client():
     global handler_registered
-    download_directory = "storage/"
+    global download_directory
+    
     if not os.path.exists(download_directory):
         os.makedirs(download_directory)
     max_retries = 5
@@ -273,7 +279,7 @@ async def start_client():
                 try:
                     await client.run_until_disconnected()
                 except Exception as e:
-                    logger.info(f"[un_until_disconnected] Произошла ошибка: {e}")
+                    logger.info(f"[start_client] Произошла ошибка: {e}")
                 
                 break  # Выход из цикла попыток при успешном подключении
             else:

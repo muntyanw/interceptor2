@@ -2,7 +2,7 @@ venv/
 storage/
 .venv/
 
-interceptor/__pycache__
+interceptor/__pycache__/
 
 sessionTC.session
 sessionTC.session-journal
