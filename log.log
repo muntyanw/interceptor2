@@ -7008,3 +7008,6 @@ Buy 🟩 с файлами: []
 2024-10-02 09:35:17 - interceptor.logger - INFO - [send_message_to_channels] Отправка файла клієнтом в канал: -1002291645140, файлы: ['storage/photo_2024-10-02_06-35-11.jpg']
 2024-10-02 09:35:17 - telethon.client.uploads - INFO - Uploading file of 29929 bytes in 1 chunks of 131072
 2024-10-02 09:35:18 - interceptor.logger - INFO - [send_message_to_channels] Завершение отправки сообщений и файлов.
+2024-10-02 09:36:39 - telethon.client.telegrambaseclient - INFO - Disconnecting borrowed sender for DC 1
+2024-10-02 09:36:39 - telethon.network.mtprotosender - INFO - Disconnecting from 149.154.175.53:443/TcpFull...
+2024-10-02 09:36:39 - telethon.network.mtprotosender - INFO - Disconnection from 149.154.175.53:443/TcpFull complete!
