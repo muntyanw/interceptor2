@@ -24,7 +24,11 @@ channels_to_listen = {
         'replacements': {
             'bingx': 'google',
             'Bingx': 'Google',
-            'SamCrypto_Master': 'reach_me_here',
+            'Victor Trader': 'reach_me_here',
+            'Victor': 'reach_me_here',
+            'https://t.me/victortraderofficialsupport':'https://www.binance.com',
+            'https://t.me/c/2009977255/12717':'https://www.binance.com',
+            'https://bit.ly/safebestbroker':'https://www.binance.com',
         },
         'channels_to_send': [-1002291645140] #каналы куда отсылаем каналы с -100
     },   
@@ -39,7 +43,7 @@ replacements_in_images = { # ключи (первое слово) в нижне�
 replacements_in_buttons = {
      'OPEN BROKER': 'https://www.binance.com',
      'CONTACT SUPPORT': 'https://www.binance.com',
-     'SHARE RESULT': 'https://www.binance.com',
+     'SHARE RESULTS': 'https://www.binance.com',
      'FAQ': 'https://www.binance.com'
  }
 

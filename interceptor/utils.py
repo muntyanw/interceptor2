@@ -23,7 +23,6 @@ def is_image_file(file_path):
     return ext in ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.tiff']
 
 def replace_words(text, channel_id):
-    logger.info(f"[replace_words] channel_id =  {channel_id}")
     channel_info = channels.channels_to_listen.get(channel_id, {})
     replacements = channel_info.get('replacements', {})
     
@@ -212,29 +211,29 @@ def formatted_buttons(buttons):
         button_row = []
         for btn in row:
             # Логируем тип кнопки перед обработкой
-            logger.info(f"[handler] Обрабатываем кнопку: {btn}")
+            logger.info(f"[formatted_buttons] Обрабатываем кнопку: {btn}")
             
             # Проверяем, если это объект MessageButton
             if isinstance(btn, MessageButton):
                 # Для URL-кнопок
                 if btn.url:
                     button_row.append(Button.url(btn.text, btn.url))
-                    logger.info(f"[handler] Преобразована URL-кнопка: текст={btn.text}, url={btn.url}")
+                    logger.info(f"[formatted_buttons] Преобразована URL-кнопка: текст={btn.text}, url={btn.url}")
                 # Для инлайн-кнопок с callback
                 elif btn.data:
                     button_row.append(Button.inline(btn.text, btn.data))
-                    logger.info(f"[handler] Преобразована инлайн-кнопка: текст={btn.text}, data={btn.data}")
+                    logger.info(f"[formatted_buttons] Преобразована инлайн-кнопка: текст={btn.text}, data={btn.data}")
                 else:
-                    logger.warning(f"[handler] Неизвестный тип кнопки: {btn}")
+                    logger.warning(f"[formatted_buttons] Неизвестный тип кнопки: {btn}")
             else:
-                logger.warning(f"[handler] Неизвестный тип кнопки: {type(btn).__name__}")
+                logger.warning(f"[formatted_buttons] Неизвестный тип кнопки: {type(btn).__name__}")
 
         if button_row:
-            logger.info(f"[handler] Добавлена строка кнопок: {button_row}")
+            logger.info(f"[formatted_buttons] Добавлена строка кнопок: {button_row}")
             formatted_buttons.append(button_row)
 
     # Логируем результат преобразования кнопок
-    logger.info(f"[handler] Преобразованные кнопки: {formatted_buttons}")
+    logger.info(f"[formatted_buttons] Все кнопки преобразованы")
     return formatted_buttons
 
 def update_buttons(buttons, replacements):
