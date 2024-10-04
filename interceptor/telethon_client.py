@@ -14,13 +14,19 @@ import hashlib
 import time
 from telethon.tl.custom import Button
 from telethon.tl.custom.messagebutton import MessageButton
+from telethon.tl.types import DocumentAttributeVideo, DocumentAttributeFilename
+import pprint
 
+
+# Инициализация pprint
+pp = pprint.PrettyPrinter(indent=2)
 
 handler_registered = False
 
 # Ограничение на количество хранимых сообщений
 MAX_SENT_MESSAGES = 30
 sent_messages = deque(maxlen=MAX_SENT_MESSAGES)  # Очередь с ограничением размера
+eventIds = deque(maxlen=MAX_SENT_MESSAGES)
 
 # Хранилище для временного сохранения частей сообщений
 message_parts = defaultdict(lambda: {'files': [], 'text': None, 'sender_name': None, 'start_time': None})
@@ -78,9 +84,8 @@ async def start_client_bot():
     except Exception as e:
         logger.error(f"Ошибка при запуске клиента: {e}")
 
-async def send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id=None, buttons=None):
+async def send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id=None, buttons=None, attributes=None, messageIds=None):
     logger.info(f"[send_message_to_channels] Попытка отправки сообщения")
-    await asyncio.sleep(1)
     # Создаем уникальный идентификатор сообщения/файла
     unique_id = message_text if message_text else ""
     if files:
@@ -90,27 +95,31 @@ async def send_message_to_channels(channels_to_send, message_text, files, reply_
         logger.warning("[send_message_to_channels] Сообщение или файл уже были отправлены, пропуск отправки.")
         return
     sent_messages.append(unique_id)  # Добавление уникального идентификатора в очередь
+    
     for channel in channels_to_send:
         logger.info(f"[send_message_to_channels] Старт отправки для канала channel = {channel}")
         try:
             if files:
+                logger.info(f"[send_message_to_channels] Ids сообщений {messageIds}.")
+                logger.info(f"[send_message_to_channels] Атрибуты медиа (Document): {pp.pformat(attributes)}")
+                        
                 if buttons:
                     logger.info(f"[send_message_to_channels] Отправка файла ботом в канал: {channel}, файлы: {files}, buttons: {buttons}")
                     entity = await client_bot.get_entity(channel)
-                    await client_bot.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, buttons=buttons) #
+                    await client_bot.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, buttons=buttons, attributes=attributes) #
                 else:    
-                    logger.info(f"[send_message_to_channels] Отправка файла клієнтом в канал: {channel}, файлы: {files}")
+                    logger.info(f"[send_message_to_channels] Отправка файла клиєнтом в канал: {channel}, файлы: {files}")
                     entity = await client.get_entity(channel)
-                    await client.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id)
+                    await client.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, attributes=attributes)
             else:
                 if buttons:
                     logger.info(f"[send_message_to_channels] Отправка сообщения в канал ботом: {channel}, buttons: {buttons}")
                     entity = await client_bot.get_entity(channel)
-                    await client_bot.send_message(entity, message_text, reply_to=reply_to_msg_id, buttons=buttons) #
+                    await client_bot.send_message(entity, message_text, reply_to=reply_to_msg_id, buttons=buttons, attributes=attributes) #
                 else:
                     logger.info(f"[send_message_to_channels] Отправка сообщения в канал клієнтом: {channel}")
                     entity = await client.get_entity(channel)
-                    await client.send_message(entity, message_text, reply_to=reply_to_msg_id)
+                    await client.send_message(entity, message_text, reply_to=reply_to_msg_id, attributes=attributes)
                     
         except FloodWaitError as e:
             logger.warning(f"[send_message_to_channels] FloodWaitError: {e}. Ожидание {e.seconds} секунд.")
@@ -119,14 +128,21 @@ async def send_message_to_channels(channels_to_send, message_text, files, reply_
             logger.error(f"[send_message_to_channels] Ошибка при отправке сообщения: {e}")
     logger.info("[send_message_to_channels] Завершение отправки сообщений и файлов.")
     
-async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
+async def process_message(chat_id, reply_to_msg_id=None):
     from .models import AutoSendMessageSetting
     """Обрабатывает сообщение из `message_parts` после таймаута."""
     message_data = message_parts[chat_id]
     files = message_data['files']
     message_text = message_data['text'] or ""
     sender_name = message_data['sender_name']
+    buttons = message_data['buttons']
+    attributes = message_data.get('attributes', None) 
+    messageIds = message_data['messageIds']
+    
     logger.info(f"[process_message] Сообщение из канала {chat_id}: {message_text}, Отправитель: {sender_name}, Файлы: {files}")
+    
+    logger.info(f"[process_message] Ids сообщений {message_parts[chat_id]['messageIds']}.")
+    
     try:
         get_first_setting = sync_to_async(AutoSendMessageSetting.objects.first)
         setting = await get_first_setting()
@@ -136,7 +152,7 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
     
     if setting and setting.is_enabled:
         logger.info(f"[process_message] setting.is_enabled = true Отправка сообщения без модерирования!")
-        await send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id, buttons)
+        await send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id, buttons, attributes, messageIds)
     else:
         modified_message, moderation_if_image, auto_moderation_and_send_text_message, channels_to_send = utils.replace_words(message_text, chat_id)
         logger.info(f"[process_message] moderation_if_image: {moderation_if_image}, file_paths: {files}, moderation_if_image and file_paths: {moderation_if_image and files}, modified_message: {modified_message}")
@@ -158,7 +174,9 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
                 modified_message, 
                 utils.replace_words_in_images(files, channels.replacements_in_images), 
                 reply_to_msg_id,
-                utils.update_buttons(buttons, channels.replacements_in_buttons)
+                utils.update_buttons(buttons, channels.replacements_in_buttons),
+                attributes,
+                messageIds
             )
     
     # Очищаем временное хранилище для текущего сообщения
@@ -169,57 +187,85 @@ async def process_message(chat_id, reply_to_msg_id=None, buttons=None):
 
 # Функция для добавления сообщений в очередь
 async def add_to_queue(event):
-    logger.info(f"[add_to_queue] Додаємо месседж до черги. event.id: {event.id}")
-    message_queue.append(event)
-    await process_queue()
+   
+   if event.id in eventIds:
+        logger.warning("[add_to_queue] Этот евент уже был добавлен в очередь, пропускаем.")
+        return
+   eventIds.append(event.id)
+
+   logger.info(f"[add_to_queue] Додаємо месседж до черги. event.id: {event.id}")
+   message_queue.append(event)
+   await process_queue()
 
 # Обработка одного сообщения
 async def process_single_message(event):
-    chat_id = utils.extract_original_id(event.chat_id)
-    sender = await event.get_sender()
-    sender_name = getattr(sender, 'first_name', 'Unknown') if hasattr(sender, 'first_name') else getattr(sender, 'title', 'Unknown')
-    
-    reply_to_msg_id = None
+   chat_id = utils.extract_original_id(event.chat_id)
+   sender = await event.get_sender()
+   sender_name = getattr(sender, 'first_name', 'Unknown') if hasattr(sender, 'first_name') else getattr(sender, 'title', 'Unknown')
+   message = event.message
+   
+   reply_to_msg_id = None
+   buttons = await event.get_buttons()
+   
+   if 'attributes' not in message_parts[chat_id]:
+      message_parts[chat_id]['attributes'] = []
+   
+   if 'messageIds' not in message_parts[chat_id]:
+      message_parts[chat_id]['messageIds'] = []
+   
+   message_parts[chat_id]['messageIds'].append(message.id)
+      
 
-    buttons = await event.get_buttons()
-
-    if buttons:
-        logger.info(f"[handler] Получены кнопки")
-        buttons = utils.formatted_buttons(buttons)
+   if buttons:
+      logger.info(f"[handler] Получены кнопки")
+      buttons = utils.formatted_buttons(buttons)
+         
+   if event.is_reply:
+      original_message = await event.get_reply_message()
+      logger.info(f"[handler] Сообщение от {chat_id} является ответом на сообщение ID {original_message.id}.")
+      # Set the reply_to_msg_id to the ID of the original message
+      reply_to_msg_id = original_message.id
+   
+   # Проверяем тип медиа
+   if isinstance(message.media, types.MessageMediaDocument):
+      logger.info(f"[handler] Медиа является документом, аудио  или видео")
+      message_parts[chat_id]['attributes'].append(message.media.document.attributes)
+      logger.info(f"[handler] Атрибуты медиа (Document): {pp.pformat(message.media.document.attributes)}")
+   elif isinstance(message.media, types.MessageMediaPhoto):
+      logger.info(f"[handler] Медиа является фотографией, добавляем None")
+      message_parts[chat_id]['attributes'].append(None)
+      
+   else:
+      logger.info(f"[handler] Неизвестный тип медиа")
             
-    if event.is_reply:
-        original_message = await event.get_reply_message()
-        logger.info(f"[handler] Сообщение от {chat_id} является ответом на сообщение ID {original_message.id}.")
-        # Set the reply_to_msg_id to the ID of the original message
-        reply_to_msg_id = original_message.id
-        
-        
-    message = event.message
-
-    if message.media:
-        file_path = await message.download_media(file=download_directory)
-        if message_parts[chat_id]['start_time'] is None:
+   if message.media:
+      file_path = await message.download_media(file=download_directory)
+      if message_parts[chat_id]['start_time'] is None:
             # Запоминаем время первого сообщения с файлом
             message_parts[chat_id]['start_time'] = time.time()
             message_parts[chat_id]['files'].append(file_path)
             message_parts[chat_id]['text'] = message.text
+            message_parts[chat_id]['buttons'] = buttons
             logger.info(f"[handler] Первое сообщение с файлом получено от {chat_id}. Запускаем таймер.")
             await asyncio.sleep(COLLECT_TIMEOUT)
-            await process_message(chat_id, reply_to_msg_id, buttons)
-        else:
+            await process_message(chat_id, reply_to_msg_id)
+      else:
             logger.info(f"[handler] Дополнительный файл получен от {chat_id}. Добавляем к уже полученным файлам.")
             message_parts[chat_id]['files'].append(file_path)
+            if buttons:
+               message_parts[chat_id]['buttons'].append(buttons)
             if message.text:
-                message_parts[chat_id]['text'] += message.text
-    else:
-        if message.text:
+               message_parts[chat_id]['text'] += message.text
+   else:
+      if message.text:
             if message_parts[chat_id]['start_time']: #если ожиндания сборщика
                 message_parts[chat_id]['start_time'] = time.time()
                 await asyncio.sleep(COLLECT_TIMEOUT)  #подождем когда уйдет прошлое
             message_parts[chat_id]['text'] = message.text
+            message_parts[chat_id]['buttons'] = buttons
             # Обработка сообщения сразу если есть текст
             logger.info(f"[handler] Текстовое сообщение получено от {chat_id}. Немедленная обработка.")
-            await process_message(chat_id, reply_to_msg_id, buttons)
+            await process_message(chat_id, reply_to_msg_id)
     
 # Функция для обработки сообщений из очереди
 async def process_queue():

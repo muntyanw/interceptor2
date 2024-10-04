@@ -236,6 +236,43 @@ def formatted_buttons(buttons):
     logger.info(f"[formatted_buttons] Все кнопки преобразованы")
     return formatted_buttons
 
+def get_file_extension(file_path):
+    """
+    Возвращает расширение файла.
+
+    :param file_path: Путь к файлу.
+    :return: Расширение файла (например, '.txt', '.jpg'). Если расширения нет, возвращает пустую строку.
+    """
+    return os.path.splitext(file_path)[1].lower()
+
+def has_file_with_extension(file_list, extension):
+    """
+    Проверяет, есть ли в списке файлов хотя бы один файл с указанным расширением.
+
+    :param file_list: Список путей к файлам.
+    :param extension: Расширение для проверки (например, '.ogg').
+    :return: True, если найден файл с указанным расширением, иначе False.
+    """
+    extension = extension.lower()  # Приводим расширение к нижнему регистру для надежности
+    for file_path in file_list:
+        if os.path.splitext(file_path)[1].lower() == extension:
+            return True
+    return False
+
+def has_file_with_extensions(file_list, extensions):
+    """
+    Проверяет, есть ли в списке файлов хотя бы один файл с указанным списком расширений.
+
+    :param file_list: Список путей к файлам.
+    :param extensions: Список расширений для проверки (например, ['.ogg', '.oga']).
+    :return: True, если найден файл с любым из указанных расширений, иначе False.
+    """
+    extensions = [ext.lower() for ext in extensions]  # Приводим все расширения к нижнему регистру для надежности
+    for file_path in file_list:
+        if os.path.splitext(file_path)[1].lower() in extensions:
+            return True
+    return False
+
 def update_buttons(buttons, replacements):
     """
     Метод для обновления ссылок на кнопках в соответствии с текстом кнопки.

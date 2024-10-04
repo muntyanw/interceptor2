@@ -43,7 +43,7 @@ replacements_in_images = { # ключи (первое слово) в нижне�
 replacements_in_buttons = {
      'OPEN BROKER': 'https://www.binance.com',
      'CONTACT SUPPORT': 'https://www.binance.com',
-     'SHARE RESULTS': 'https://www.binance.com',
+     '⤴️ SHARE RESULTS': 'https://www.binance.com',
      'FAQ': 'https://www.binance.com'
  }
 
