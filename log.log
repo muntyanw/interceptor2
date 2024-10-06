@@ -1,7 +1,0 @@
-2024-10-04 09:05:10 - interceptor.logger - INFO - Request path: /
-2024-10-04 09:05:10 - interceptor.logger - INFO - [start_client_view] Запуск клиента для авторизации.
-2024-10-04 09:05:10 - interceptor.logger - INFO - [start_client_view] Установлен флаг telethon_client_task_running в кэш.
-2024-10-04 09:05:10 - interceptor.logger - INFO - Response status code: 302
-2024-10-04 09:13:09 - interceptor.logger - INFO - Request path: /cgi-bin/luci/;stok=/locale
-2024-10-04 09:13:09 - interceptor.logger - INFO - Response status code: 404
-2024-10-04 09:13:09 - django.request - WARNING - Not Found: /cgi-bin/luci/;stok=/locale

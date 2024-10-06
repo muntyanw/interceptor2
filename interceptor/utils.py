@@ -10,8 +10,27 @@ from telethon import Button
 import hashlib
 from telethon.tl.custom import Button
 from telethon.tl.custom.messagebutton import MessageButton
+import pprint
+
+# Инициализация pprint
+pp = pprint.PrettyPrinter(indent=2)
 
 logger = logging.getLogger(__name__)
+
+# Функция для логирования атрибутов
+def log_attributes(attributes):
+    if attributes:
+        for attribute_list in attributes:
+            if attribute_list:
+                for attribute in attribute_list:
+                    # Используем __dict__, чтобы получить содержимое атрибутов
+                    if hasattr(attribute, '__dict__'):
+                        logger.info(f"Содержимое атрибута {attribute.__class__.__name__}: {pp.pformat(attribute.__dict__)}")
+                    else:
+                        # Если __dict__ нет, просто выводим объект
+                        logger.info(f"Неизвестный атрибут: {attribute}")
+    else:
+        logger.info(f"Нет атрибутов.")
 
 def is_image_file(file_path):
     # Добавляем проверку на None
@@ -319,7 +338,7 @@ def update_buttons(buttons, replacements):
             updated_buttons.append(updated_row)
         logger.info("[update_buttons] Обновление кнопок завершено.")
     else:
-       logger.info(f"[update_buttons] Нема кнопок.") 
+       logger.info(f"[update_buttons] Нет кнопок.") 
     
     return updated_buttons
 

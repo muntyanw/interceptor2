@@ -26,9 +26,10 @@ channels_to_listen = {
             'Bingx': 'Google',
             'Victor Trader': 'reach_me_here',
             'Victor': 'reach_me_here',
-            'https://t.me/victortraderofficialsupport':'https://www.binance.com',
-            'https://t.me/c/2009977255/12717':'https://www.binance.com',
-            'https://bit.ly/safebestbroker':'https://www.binance.com',
+            '@reach_me_here':'https://www.binance.com',
+            'https://t.me/c/2009977255/12895':'https://www.binance.com',
+            'https://bit.ly/safebestbroker':'https://bit.ly/4gK7frD',
+            'https://t.me/victortraderofficialsupport':'@reach_me_here',
         },
         'channels_to_send': [-1002291645140] #каналы куда отсылаем каналы с -100
     },   
@@ -41,8 +42,8 @@ replacements_in_images = { # ключи (первое слово) в нижне�
 
 # # Словарь с заменами (текущий текст кнопки -> новая ссылка)
 replacements_in_buttons = {
-     'OPEN BROKER': 'https://www.binance.com',
-     'CONTACT SUPPORT': 'https://www.binance.com',
+     'OPEN BROKER': 'https://bit.ly/4gK7frD',
+     'CONTACT SUPPORT': 'https://bit.ly/4gK7frD',
      '⤴️ SHARE RESULTS': 'https://www.binance.com',
      'FAQ': 'https://www.binance.com'
  }
