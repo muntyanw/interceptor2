@@ -16,6 +16,7 @@ from telethon.tl.custom import Button
 from telethon.tl.custom.messagebutton import MessageButton
 from telethon.tl.types import DocumentAttributeVideo, DocumentAttributeFilename
 import pprint
+from django.conf import settings
 
 
 # Инициализация pprint
@@ -45,30 +46,39 @@ download_directory = "storage/"
 async def createClients():
     global client
     global client_bot
-    logger.info("[createClients] Проверяем законекчен ли клиент.")
-    if client is None or not client.is_connected():
-        logger.info("[createClients] Создаем клиент.")
-        client = TelegramClient(channels.name_session_client, channels.api_id, channels.api_hash,
-                                connection_retries=10,  # Количество попыток переподключения
-                                timeout=60  # Тайм-аут ожидания в секундах
-                            )
-        await client.connect()
-    else:
-        logger.info("[createClients] Клиент есть и законекчен.")
+    
+    try:
+        logger.info("[createClients] Проверяем законекчен ли клиент.")
+        if client is None or not client.is_connected():
+            logger.info("[createClients] Создаем клиент.")
+            client = TelegramClient(channels.name_session_client, channels.api_id, channels.api_hash,
+                                    connection_retries=10,  # Количество попыток переподключения
+                                    timeout=60  # Тайм-аут ожидания в секундах
+                                )
+            await client.connect()
+        else:
+            logger.info("[createClients] Клиент есть и законекчен.")
+            
+        
 
-    logger.info("[createClients] Проверяем законекчен ли бот клиент.")
-    if client_bot is None or not client_bot.is_connected():   
-        logger.info("[createClients] Создаем бот клиент.")
-        client_bot = TelegramClient(
-                channels.name_session_bot,
-                channels.api_id,
-                channels.api_hash,
-                connection_retries=10,  # Количество попыток переподключения
-                timeout=60  # Тайм-аут ожидания в секундах
-            )
-        await client_bot.connect()
-    else:
-        logger.info("[createClients] Клиент есть и законекчен.")
+        logger.info("[createClients] Проверяем законекчен ли бот клиент.")
+        if client_bot is None or not client_bot.is_connected():   
+            logger.info("[createClients] Создаем бот клиент.")
+            client_bot = TelegramClient(
+                    channels.name_session_bot,
+                    channels.api_id,
+                    channels.api_hash,
+                    connection_retries=10,  # Количество попыток переподключения
+                    timeout=60  # Тайм-аут ожидания в секундах
+                )
+            await client_bot.connect()
+        else:
+            logger.info("[createClients] Клиент есть и законекчен.")
+        
+    except Exception as e:
+        logger.error(f"[createClients] Ошибка при попытке создания клиента {e}")
+        #logger.error(f"[createClients] Удаляем ссесию")
+        #utils.removeFilesSessions(settings)
 
 async def start_client_bot():
     global client_bot
@@ -84,7 +94,7 @@ async def start_client_bot():
     except Exception as e:
         logger.error(f"Ошибка при запуске клиента: {e}")
 
-async def send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id=None, buttons=None, attributes=None, messageIds=None):
+async def send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id=None, buttons=None, attributes=None, messageIds=None, isTgsticker=False, isVoice=False):
     logger.info(f"[send_message_to_channels] Попытка отправки сообщения")
     # Создаем уникальный идентификатор сообщения/файла
     unique_id = message_text if message_text else ""
@@ -94,9 +104,9 @@ async def send_message_to_channels(channels_to_send, message_text, files, reply_
                 try:
                     unique_id += utils.hash_file(file)  # Добавляем хэш файла к идентификатору
                 except Exception as e:
-                    logger.error(f"[send_message_to_channels][channel:{channel}] Ошибка при вычислении хэша файла {file}: {e}")
+                    logger.error(f"[send_message_to_channels] Ошибка при вычислении хэша файла {file}: {e}")
             else:
-                logger.warning(f"[send_message_to_channels][channel:{channel}] Файл имеет значение None и не будет обработан.")
+                logger.warning(f"[send_message_to_channels] Файл имеет значение None и не будет обработан.")
     if unique_id in sent_messages:
         logger.warning(f"[send_message_to_channels] Сообщение или файл уже были отправлены, пропуск отправки.")
         return
@@ -109,10 +119,15 @@ async def send_message_to_channels(channels_to_send, message_text, files, reply_
                 if attributes:
                     logger.info(f"[send_message_to_channels][channel:{channel}] Атрибуты attributes:")
                     utils.log_attributes(attributes)
-                        
-                logger.info(f"[send_message_to_channels][channel:{channel}] Отправка файла ботом в канал: {channel}, файлы: {files}, buttons: {buttons}")
-                entity = await client_bot.get_entity(channel)
-                await client_bot.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, buttons=buttons, attributes=attributes) #
+                    
+                if isTgsticker or isVoice:
+                    logger.info(f"[send_message_to_channels][channel:{channel}] Отправка файла клиентом в канал: {channel}, файлы: {files}, buttons: {buttons}")
+                    entity = await client.get_entity(channel)
+                    await client.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, buttons=buttons, attributes=attributes)
+                else:
+                    logger.info(f"[send_message_to_channels][channel:{channel}] Отправка файла ботом в канал: {channel}, файлы: {files}, buttons: {buttons}")
+                    entity = await client_bot.get_entity(channel)
+                    await client_bot.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, buttons=buttons, attributes=attributes) #
             else:
                 if buttons:
                     logger.info(f"[send_message_to_channels][channel:{channel}] Отправка сообщения в канал ботом: {channel}, buttons: {buttons}")
@@ -132,7 +147,7 @@ async def send_message_to_channels(channels_to_send, message_text, files, reply_
     
 async def process_message(chat_id, reply_to_msg_id=None):
     from .models import AutoSendMessageSetting
-    """Обрабатывает сообщение из `message_parts` после таймаута."""
+    logger.info(f"[process_message][chat_id:{chat_id}] Обрабатывает сообщение из `message_parts`.")
     message_data = message_parts[chat_id]
     files = message_data['files']
     message_text = message_data['text'] or ""
@@ -144,7 +159,9 @@ async def process_message(chat_id, reply_to_msg_id=None):
     sender_name = message_data['sender_name']
     buttons = message_data.get('buttons', None)
     attributes = message_data.get('attributes', None) 
-    messageIds = message_data['messageIds']
+    isTgsticker = message_data.get('isTgsticker', None)
+    messageIds = message_data.get('messageIds', None)
+    isVoice = message_data['isVoice']
     
     logger.info(f"[process_message][chat_id:{chat_id}] Сообщение из канала {chat_id}: {message_text}, Отправитель: {sender_name}, Файлы: {files}")
     
@@ -159,7 +176,7 @@ async def process_message(chat_id, reply_to_msg_id=None):
     
     if setting and setting.is_enabled:
         logger.info(f"[process_message][chat_id:{chat_id}] setting.is_enabled = true Отправка сообщения без модерирования!")
-        await send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id, buttons, attributes, messageIds)
+        await send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id, buttons, attributes, messageIds, isTgsticker, isVoice)
     else:
         modified_message, moderation_if_image, auto_moderation_and_send_text_message, channels_to_send = utils.replace_words(message_text, chat_id)
         logger.info(f"[process_message][chat_id:{chat_id}] moderation_if_image: {moderation_if_image}, file_paths: {files}, moderation_if_image and file_paths: {moderation_if_image and files}, modified_message: {modified_message}")
@@ -183,7 +200,9 @@ async def process_message(chat_id, reply_to_msg_id=None):
                 reply_to_msg_id,
                 utils.update_buttons(buttons, channels.replacements_in_buttons),
                 attributes,
-                messageIds
+                messageIds,
+                isTgsticker,
+                isVoice
             )
     
     # Очищаем временное хранилище для текущего сообщения
@@ -206,6 +225,9 @@ async def add_to_queue(event):
 
 # Обработка одного сообщения
 async def process_single_message(event):
+    
+   global download_directory
+    
    chat_id = utils.extract_original_id(event.chat_id)
    sender = await event.get_sender()
    sender_name = getattr(sender, 'first_name', 'Unknown') if hasattr(sender, 'first_name') else getattr(sender, 'title', 'Unknown')
@@ -219,6 +241,9 @@ async def process_single_message(event):
    
    if 'messageIds' not in message_parts[chat_id]:
       message_parts[chat_id]['messageIds'] = []
+      
+   message_parts[chat_id]['isTgsticker'] = None
+   message_parts[chat_id]['isVoice'] = None
    
    message_parts[chat_id]['messageIds'].append(message.id)
       
@@ -233,15 +258,31 @@ async def process_single_message(event):
       # Set the reply_to_msg_id to the ID of the original message
       reply_to_msg_id = original_message.id
    
-   logger.info(f"[process_single_message][chat_id:{chat_id}] Проверяем тип медиа")
+   file_path = None
+   
    if message.media:
-        # Логируем тип объекта медиа
+        file_path = await message.download_media(file=download_directory)
+        logger.info(f"[process_single_message][chat_id:{chat_id}] Проверяем тип медиа")
         media_type = type(message.media)
         logger.info(f"[process_single_message][chat_id:{chat_id}] Тип медиа: {media_type}")
         
         if isinstance(message.media, types.MessageMediaDocument):
             logger.info(f"[process_single_message][chat_id:{chat_id}] Медиа является документом, аудио  или видео,  добавляем в message_parts[chat_id]['attributes']")
-            message_parts[chat_id]['attributes'].append(message.media.document.attributes)
+            
+            document = message.media.document
+            if document.mime_type == 'application/x-tgsticker' and document.attributes:
+                logger.info(f"[process_single_message][chat_id:{chat_id}] Это стикер")
+                if any(hasattr(attr, 'type') and attr.type == 'animation' for attr in document.attributes):
+                    logger.info(f"[process_single_message][chat_id:{chat_id}] Это анимированный стикер")
+                    message_parts[chat_id]['isTgsticker'] = True
+                message_parts[chat_id]['attributes'].append(message.media.document.attributes)
+                    
+            if utils.has_file_with_extensions([file_path], ['.ogg', '.oga']):
+                logger.info(f"[process_single_message][chat_id:{chat_id}] Это войс")
+                message_parts[chat_id]['isVoice'] = True
+                message_parts[chat_id]['attributes'].append(None)
+                
+                    
             
         elif isinstance(message.media, types.MessageMediaPhoto):
             logger.info(f"[process_single_message][chat_id:{chat_id}] Медиа является фотографией, добавляем None в message_parts[chat_id]['attributes']")
@@ -250,36 +291,41 @@ async def process_single_message(event):
         elif isinstance(message.media, types.MessageMediaWebPage):
             webpage = message.media.webpage
             # Сохраняем атрибуты веб-страницы
-            webpage_info = f"[process_single_message][chat_id:{chat_id}] URL: {webpage.url}\nЗаголовок: {webpage.title}\nОписание: {webpage.description}"
+            webpage_info = f"URL: {webpage.url}\nЗаголовок: {webpage.title}\nОписание: {webpage.description}"
             message_parts[chat_id]['webpage'] = webpage_info
             message_parts[chat_id]['attributes'].append(None)
             
         else:
             logger.info(f"[process_single_message][chat_id:{chat_id}] Неизвестный тип медиа")
             message_parts[chat_id]['attributes'].append(message.media)
-   else:
-        logger.info(f"[process_single_message][chat_id:{chat_id}] Нет медиа вложений")
+        
                 
-   if message.media:
-      file_path = await message.download_media(file=download_directory)
-      if message_parts[chat_id]['start_time'] is None:
+        if message_parts[chat_id]['start_time'] is None:
             # Запоминаем время первого сообщения с файлом
             message_parts[chat_id]['start_time'] = time.time()
             message_parts[chat_id]['files'].append(file_path)
             message_parts[chat_id]['text'] = message.text
             message_parts[chat_id]['buttons'] = buttons
-            logger.info(f"[process_single_message][chat_id:{chat_id}] Первое сообщение с файлом получено от {chat_id}. Запускаем таймер.")
-            await asyncio.sleep(COLLECT_TIMEOUT)
+            
+            if not message_parts[chat_id]['isTgsticker']:
+                logger.info(f"[process_single_message][chat_id:{chat_id}] Первое сообщение с файлом получено от {chat_id}. Запускаем таймер.")
+                await asyncio.sleep(COLLECT_TIMEOUT)
+            else:
+                logger.info(f"[process_single_message][chat_id:{chat_id}] Это стикер отправляем сразу.")
+                
             await process_message(chat_id, reply_to_msg_id)
-      else:
+        else:
             logger.info(f"[process_single_message][chat_id:{chat_id}] Дополнительный файл получен от {chat_id}. Добавляем к уже полученным файлам.")
             message_parts[chat_id]['files'].append(file_path)
             if buttons:
-               message_parts[chat_id]['buttons'].append(buttons)
+                message_parts[chat_id]['buttons'].append(buttons)
             if message.text:
-               message_parts[chat_id]['text'] += message.text
+                message_parts[chat_id]['text'] += message.text
    else:
-      if message.text:
+       
+        logger.info(f"[process_single_message][chat_id:{chat_id}] Нет медиа вложений")
+        
+        if message.text:
             if message_parts[chat_id]['start_time']: #если ожиндания сборщика
                 message_parts[chat_id]['start_time'] = time.time()
                 await asyncio.sleep(COLLECT_TIMEOUT)  #подождем когда уйдет прошлое
@@ -328,8 +374,10 @@ async def start_client():
                 logger.info(f"[start_client] Регистрируем обработчик")
                 await client.connect()
                 if not await client.is_user_authorized():
-                    logger.info("[start_client] Клиент не авторизован, завершаем процесс")
-                    return
+                     #logger.info("[start_client] Клиент не авторизован, идем на следующую попытку")
+                     #time.sleep(delay)
+                     #continue
+                     return
                 logger.info("[start_client] Клиент Telethon успешно подключен и авторизован")
                 
                 await start_client_bot()

@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from telethon import TelegramClient, errors
 from telethon.sessions import StringSession
 from . import channels
-from . import utils 
+from . import utils
 from .logger import logger
 from asgiref.sync import sync_to_async
 from django.core.cache import cache
@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from .models import AutoSendMessageSetting, TelegramMessage
 from django.conf import settings
 from telethon.sessions import SQLiteSession
-from .telethon_client import client, client_bot, createClients
+from .telethon_client import client, client_bot, createClients, start_client
 import asyncio
 from django.http import HttpResponse
 
@@ -24,6 +24,8 @@ async def message_list_and_edit(request, edit_pk=None):
     logger.info("[message_list_and_edit] Перевірка client.connect")
     if not client or not await client.is_user_authorized() or not telethon_client_task_running:
         return redirect("/")
+    
+    await start_client()
 
     # Получение списка сообщений и редактируемого сообщения асинхронно
     messages = await sync_to_async(list)(TelegramMessage.objects.all())
@@ -121,11 +123,16 @@ async def start_client_view(request):
             else:
                 cache.set('telethon_client_task_running', True)
                 logger.info("[start_client_view] Установлен флаг telethon_client_task_running в кэш.")
+                
+                await createClients()
+                
                 # Перенаправление к списку сообщений
                 return redirect("message_list_and_edit")
             
             logger.info("[start_client_view] Попытка подключения клиента.")
+            
             await client.connect()
+            await start_client()
 
         except errors.SessionPasswordNeededError:
             logger.warning("[start_client_view] Требуется двухфакторная аутентификация, перенаправляем.")
@@ -143,7 +150,7 @@ async def start_client_view(request):
 async def check_authorization(client):
     await client.connect()
     return await client.is_user_authorized()
-
+       
 async def telegram_auth(request):
     global client
     global client_bot
@@ -151,6 +158,7 @@ async def telegram_auth(request):
     logger.info("[telegram_auth] Запрос на авторизацию получен.")
     
     if request.method == "POST":
+        
         phone = request.POST.get("phone")
         code = request.POST.get("code")
         logger.info(f"[telegram_auth] Телефон: {phone}, Код: {code}")
@@ -162,7 +170,8 @@ async def telegram_auth(request):
 
         if phone and not code:
             try:
-                # Отправляем запрос на получение кода
+                logger.warning(f"[telegram_auth] phone:{phone}")
+                logger.warning("[telegram_auth] Отправляем запрос на получение кода")
                 result = await client.send_code_request(phone)
                 client.connect()
                 logger.info(f"[telegram_auth] Код авторизации отправлен на номер: {phone}")
@@ -260,11 +269,9 @@ async def logout_view(request):
                 #await client_bot.log_out()
                 #client = None
                 #client_bot = None
-                utils.remove_file(settings.BASE_DIR + '/' + channels.name_session_client + ".session")
-                utils.remove_file(settings.BASE_DIR + '/' + channels.name_session_client + ".session-journal")
-                utils.remove_file(settings.BASE_DIR + '/' + channels.name_session_bot + ".session")
-                utils.remove_file(settings.BASE_DIR + '/' + channels.name_session_bot + ".session-journal")
-                logger.info("[logout_view] Клиентская сессия удалена.")
+                
+                utils.removeFilesSessions(settings)
+                
                 return JsonResponse({'status': 'success'})
         except Exception as e:
             logger.error(f"[logout_view] Ошибка при удалении сессии: {str(e)}")

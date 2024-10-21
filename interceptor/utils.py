@@ -44,7 +44,9 @@ def is_image_file(file_path):
 def replace_words(text, channel_id):
     channel_info = channels.channels_to_listen.get(channel_id, {})
     replacements = channel_info.get('replacements', {})
-    
+
+    text = replace_links(text, channels.replacement_urls)
+        
     for key, value in replacements.items():
         text = text.replace(key, value)
         
@@ -391,3 +393,48 @@ def get_session_web_file_path(request, settings):
     session_file_path = os.path.join(settings.SESSION_FILE_PATH, session_key)
     logger.info(f"[get_session_file_path] Путь к файлу сессии веб: {session_file_path}")
     return session_file_path
+
+def removeFilesSessions(settings):
+    paths = [
+        settings.BASE_DIR + '/' + channels.name_session_client + ".session",
+        settings.BASE_DIR + '/' + channels.name_session_client + ".session-journal",
+        settings.BASE_DIR + '/' + channels.name_session_bot + ".session",
+        settings.BASE_DIR + '/' + channels.name_session_bot + ".session-journal"
+    ]
+    
+    for path in paths:
+        logger.info(f"[removeFilesSessions] remove: {path}")
+        remove_file(path)
+
+    logger.info("[removeFilesSessions] Клиентская сессия удалена.")
+
+def replace_links(text, replacement_urls):
+    """
+    Заменяет ссылки в тексте в соответствии с заданными правилами.
+    
+    :param text: Исходный текст, в котором ищем и заменяем ссылки.
+    :param replacements: Словарь, где ключи - это строки, которые ищем в ссылках,
+                         а значения - текст, на который заменяем ссылки.
+    :return: Измененный текст.
+    """
+
+    logger.info(f"[replace_links] ищем ссылки с указанным текстом")
+    # Регулярное выражение для поиска ссылок
+    link_pattern = re.compile(r'https?://[^\s]+')
+    
+    # Функция для замены ссылок в зависимости от соответствий
+    def replace_match(match):
+        link = match.group(0)
+        if link:
+            logger.info(f"[replace_links] найдены линки {link}")
+        for search_text, replace_text in replacement_urls.items():
+            if search_text in link:
+                logger.info(f"[replace_links] найден текст {search_text} вся ссылка меняется на {replace_text}")
+                return replace_text
+        logger.info(f"[replace_links] линк не меняется")
+        return link  # Если совпадений нет, оставляем ссылку без изменений
+
+    # Заменяем ссылки в тексте
+    return link_pattern.sub(replace_match, text)
+
+         

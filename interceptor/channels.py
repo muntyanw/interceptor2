@@ -1,6 +1,6 @@
-api_id = 22900607  #25965329
+api_id = 22900607 #25965329
 api_hash = '2101d7377e8f53d4d356ba1485d79eeb' #"6604012087bc1273f1f918571c02af24"
-bot_token = '7738836203:AAHY-A-TUXd-izs-zP8DlsBandrxgjf5OGw' #'7905362232:AAHV2il7ogCFpRLDmM92pLhHYXBsIf87-_M' #''
+bot_token = '7738836203:AAHY-A-TUXd-izs-zP8DlsBandrxgjf5OGw' #'7905362232:AAHV2il7ogCFpRLDmM92pLhHYXBsIf87-_M'
 
 name_session_client = 'sessionTC'
 name_session_bot = 'sessionBot'
@@ -47,6 +47,11 @@ replacements_in_buttons = {
      '⤴️ SHARE RESULTS': 'https://www.binance.com',
      'FAQ': 'https://www.binance.com'
  }
+
+replacement_urls = { # если ссылка содержит в себе первое слово, то вся она меняется на второе слово
+    "bingx": "google.com",
+    
+}
 
 
 
