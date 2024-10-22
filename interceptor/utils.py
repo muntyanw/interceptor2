@@ -11,6 +11,8 @@ import hashlib
 from telethon.tl.custom import Button
 from telethon.tl.custom.messagebutton import MessageButton
 import pprint
+from moviepy.editor import VideoFileClip
+from collections.abc import Iterable
 
 # Инициализация pprint
 pp = pprint.PrettyPrinter(indent=2)
@@ -21,7 +23,7 @@ logger = logging.getLogger(__name__)
 def log_attributes(attributes):
     if attributes:
         for attribute_list in attributes:
-            if attribute_list:
+            if attribute_list and isinstance(attribute_list, Iterable):
                 for attribute in attribute_list:
                     # Используем __dict__, чтобы получить содержимое атрибутов
                     if hasattr(attribute, '__dict__'):
@@ -437,4 +439,76 @@ def replace_links(text, replacement_urls):
     # Заменяем ссылки в тексте
     return link_pattern.sub(replace_match, text)
 
-         
+def convert_round_video(input_file, output_file):
+    """
+    Конвертирует круговое видео из .oga в .mp4.
+    
+    :param input_file: Путь к входному .oga файлу (круговое видео).
+    :param output_file: Путь для сохранения выходного .mp4 файла.
+    """
+    try:
+        logger.info(f"[convert_round_video] Попытка конвертации {output_file}")
+        # Загрузка видеофайла
+        video_clip = VideoFileClip(input_file)
+        
+        # Конвертация и сохранение в формате MP4
+        video_clip.write_videofile(output_file, codec='libx264')
+
+        logger.info(f"[convert_round_video] Файл успешно конвертирован и сохранен как {output_file}")
+    except Exception as e:
+        logger.info(f"[convert_round_video] Ошибка при конвертации: {e}")
+
+def change_file_extension(file_path, new_extension):
+    """
+    Заменяет расширение файла на заданное.
+    
+    :param file_path: Путь к файлу, у которого нужно заменить расширение.
+    :param new_extension: Новое расширение файла (например, 'mp4').
+    :return: Путь к файлу с новым расширением.
+    """
+    # Убираем точку из нового расширения, если она есть
+    new_extension = new_extension.lstrip('.')
+    
+    # Изменяем расширение файла
+    new_file_path = os.path.splitext(file_path)[0] + f'.{new_extension}'
+    
+    return new_file_path
+
+def get_video_dimensions(file_path):
+    """
+    Получает размеры видео с помощью MoviePy.
+    :param file_path: Путь к видеофайлу.
+    :return: (ширина, высота, длительность)
+    """
+    video = VideoFileClip(file_path)
+    return video.w, video.h, int(video.duration)
+
+def get_video_dimensions_cv2(file_path):
+    cap = cv2.VideoCapture(file_path)
+    if not cap.isOpened():
+        return None, None, None, None
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    duration = cap.get(cv2.CAP_PROP_FRAME_COUNT) / fps if fps else None
+    cap.release()
+    return width, height, duration, fps
+
+def is_video_file(file_path):
+    """
+    Определяет, является ли файл видео по его расширению.
+    
+    :param file_path: Путь к файлу.
+    :return: True, если файл является видео, иначе False.
+    """
+    # Список расширений видеофайлов
+    video_extensions = {".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".ogg", ".ogv", ".oga", ".m4v"}
+    
+    # Получаем расширение файла
+    file_extension = file_path.lower().split('.')[-1]
+    
+    # Проверяем, есть ли расширение в списке видео
+    return f".{file_extension}" in video_extensions
+
+
+

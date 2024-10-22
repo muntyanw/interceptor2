@@ -30,6 +30,7 @@ channels_to_listen = {
             'https://t.me/c/2009977255/12895':'https://www.binance.com',
             'https://bit.ly/safebestbroker':'https://bit.ly/4gK7frD',
             'https://t.me/victortraderofficialsupport':'@reach_me_here',
+            'https://t.me/c/2009977255/13812':'https://www.binance.com',
         },
         'channels_to_send': [-1002291645140] #каналы куда отсылаем каналы с -100
     },   
@@ -49,8 +50,8 @@ replacements_in_buttons = {
  }
 
 replacement_urls = { # если ссылка содержит в себе первое слово, то вся она меняется на второе слово
-    "bingx": "google.com",
-    
+    "bingx": "https://www.binance.com",
+    "t.me": "https://www.binance.com",
 }
 
 

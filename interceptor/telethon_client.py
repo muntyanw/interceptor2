@@ -116,10 +116,6 @@ async def send_message_to_channels(channels_to_send, message_text, files, reply_
         logger.info(f"[send_message_to_channels][channel:{channel}] Старт отправки для канала channel = {channel}, Ids сообщений {messageIds}")
         try:
             if files:
-                if attributes:
-                    logger.info(f"[send_message_to_channels][channel:{channel}] Атрибуты attributes:")
-                    utils.log_attributes(attributes)
-                    
                 if isTgsticker or isVoice:
                     logger.info(f"[send_message_to_channels][channel:{channel}] Отправка файла клиентом в канал: {channel}, файлы: {files}, buttons: {buttons}")
                     entity = await client.get_entity(channel)
@@ -268,36 +264,69 @@ async def process_single_message(event):
         
         if isinstance(message.media, types.MessageMediaDocument):
             logger.info(f"[process_single_message][chat_id:{chat_id}] Медиа является документом, аудио  или видео,  добавляем в message_parts[chat_id]['attributes']")
-            
+                        
             document = message.media.document
+
+            if utils.is_video_file(file_path):
+                logger.info(f"[process_single_message][chat_id:{chat_id}] Это видео")
+                width, height, duration, fps = utils.get_video_dimensions_cv2(file_path)
+                logger.info(f"[process_single_message][chat_id:{chat_id}] Получили атрибуты видео width:{width} , height:{height}, duration:{duration}")
+                 # Создание атрибутов для видео
+                video_attributes = [
+                    DocumentAttributeVideo(
+                        duration=duration,
+                        w=width,
+                        h=height,
+                        supports_streaming=True
+                    )
+                ]
+                message_parts[chat_id].setdefault('attributes', []).append(video_attributes)
+
+
             if document.mime_type == 'application/x-tgsticker' and document.attributes:
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Это стикер")
                 if any(hasattr(attr, 'type') and attr.type == 'animation' for attr in document.attributes):
                     logger.info(f"[process_single_message][chat_id:{chat_id}] Это анимированный стикер")
                     message_parts[chat_id]['isTgsticker'] = True
-                message_parts[chat_id]['attributes'].append(message.media.document.attributes)
+                message_parts[chat_id].setdefault('attributes', []).append(message.media.document.attributes)
+                
                     
             if utils.has_file_with_extensions([file_path], ['.ogg', '.oga']):
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Это войс")
                 message_parts[chat_id]['isVoice'] = True
-                message_parts[chat_id]['attributes'].append(None)
-                
-                    
+                output_file = utils.change_file_extension(file_path, 'mp4')
+                utils.convert_round_video(file_path, output_file)
+                file_path = output_file
+
+                # Создание атрибутов видео
+                video_attributes = [
+                    DocumentAttributeVideo(
+                        duration=10,
+                        w=240,
+                        h=240,
+                        round_message=True,
+                        supports_streaming=True
+                    )
+                ]
+                message_parts[chat_id].setdefault('attributes', []).append(video_attributes)
+
+            logger.info(f"[process_single_message][chat_id:{chat_id}] Атрибуты attributes:")
+            utils.log_attributes(message_parts[chat_id]['attributes'])
             
         elif isinstance(message.media, types.MessageMediaPhoto):
             logger.info(f"[process_single_message][chat_id:{chat_id}] Медиа является фотографией, добавляем None в message_parts[chat_id]['attributes']")
-            message_parts[chat_id]['attributes'].append(None)
+            message_parts[chat_id].setdefault('attributes', []).append(None)
             
         elif isinstance(message.media, types.MessageMediaWebPage):
             webpage = message.media.webpage
             # Сохраняем атрибуты веб-страницы
             webpage_info = f"URL: {webpage.url}\nЗаголовок: {webpage.title}\nОписание: {webpage.description}"
             message_parts[chat_id]['webpage'] = webpage_info
-            message_parts[chat_id]['attributes'].append(None)
+            message_parts[chat_id].setdefault('attributes', []).append(None)
             
         else:
             logger.info(f"[process_single_message][chat_id:{chat_id}] Неизвестный тип медиа")
-            message_parts[chat_id]['attributes'].append(message.media)
+            message_parts[chat_id].setdefault('attributes', []).append(message.media)
         
                 
         if message_parts[chat_id]['start_time'] is None:

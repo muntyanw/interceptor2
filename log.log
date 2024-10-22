@@ -1,24 +1,677 @@
-2024-10-21 13:33:21 - interceptor.logger - INFO - Request path: /phpinfo.php
-2024-10-21 13:33:21 - interceptor.logger - INFO - Response status code: 404
-2024-10-21 13:33:21 - django.request - WARNING - Not Found: /phpinfo.php
-2024-10-21 13:33:21 - interceptor.logger - INFO - Request path: /info.php
-2024-10-21 13:33:21 - interceptor.logger - INFO - Response status code: 404
-2024-10-21 13:33:21 - django.request - WARNING - Not Found: /info.php
-2024-10-21 13:33:21 - interceptor.logger - INFO - Request path: /phpinfo
-2024-10-21 13:33:21 - interceptor.logger - INFO - Response status code: 404
-2024-10-21 13:33:21 - django.request - WARNING - Not Found: /phpinfo
-2024-10-21 13:33:22 - interceptor.logger - INFO - Request path: /aws.yml
-2024-10-21 13:33:22 - interceptor.logger - INFO - Response status code: 404
-2024-10-21 13:33:22 - django.request - WARNING - Not Found: /aws.yml
-2024-10-21 13:33:22 - interceptor.logger - INFO - Request path: /.aws/credentials
-2024-10-21 13:33:22 - interceptor.logger - INFO - Response status code: 404
-2024-10-21 13:33:22 - django.request - WARNING - Not Found: /.aws/credentials
-2024-10-21 13:33:23 - interceptor.logger - INFO - Request path: /_profiler/phpinfo
-2024-10-21 13:33:23 - interceptor.logger - INFO - Response status code: 404
-2024-10-21 13:33:23 - django.request - WARNING - Not Found: /_profiler/phpinfo
-2024-10-21 13:33:23 - interceptor.logger - INFO - Request path: /test.php
-2024-10-21 13:33:23 - interceptor.logger - INFO - Response status code: 404
-2024-10-21 13:33:23 - django.request - WARNING - Not Found: /test.php
-2024-10-21 13:33:23 - interceptor.logger - INFO - Request path: /.env.bak
-2024-10-21 13:33:23 - interceptor.logger - INFO - Response status code: 404
-2024-10-21 13:33:23 - django.request - WARNING - Not Found: /.env.bak
+2024-10-22 08:17:43 - interceptor.logger - INFO - Request path: /
+2024-10-22 08:17:43 - interceptor.logger - INFO - [start_client_view] Запуск клиента для авторизации.
+2024-10-22 08:17:43 - interceptor.logger - INFO - [start_client_view] Установлен флаг telethon_client_task_running в кэш.
+2024-10-22 08:17:43 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 08:17:43 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 08:17:43 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 08:17:43 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 08:17:43 - interceptor.logger - INFO - Response status code: 302
+2024-10-22 08:17:43 - interceptor.logger - INFO - Request path: /cgi-bin/ViewLog.asp
+2024-10-22 08:17:43 - interceptor.logger - INFO - Response status code: 404
+2024-10-22 08:17:43 - django.request - WARNING - Not Found: /cgi-bin/ViewLog.asp
+2024-10-22 08:21:00 - interceptor.logger - INFO - [add_to_queue] Додаємо месседж до черги. event.id: 13912
+2024-10-22 08:21:00 - interceptor.logger - INFO - [process_queue] Початок обробкі чергі.
+2024-10-22 08:21:00 - interceptor.logger - INFO - [process_queue] Наступний меседж із чергі. event.id:13912
+2024-10-22 08:21:01 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Нет медиа вложений
+2024-10-22 08:21:01 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Текстовое сообщение получено от 2009977255. Немедленная обработка.
+2024-10-22 08:21:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Обрабатывает сообщение из `message_parts`.
+2024-10-22 08:21:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Сообщение из канала 2009977255: 📊 🇱🇧 LBP/USD 🇺🇸 OTC
+🕘 Expiration 5M
+⏺ Entry at 01:30
+🟩 BUY
+
+🔽 Martingale levels 
+1️⃣ level At 01:35
+2️⃣ level At 01:40
+3️⃣ level At 01:45, Отправитель: None, Файлы: []
+2024-10-22 08:21:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Ids сообщений [13912].
+2024-10-22 08:21:01 - interceptor.utils - INFO - [replace_links] ищем ссылки с указанным текстом
+2024-10-22 08:21:01 - interceptor.utils - INFO - [replace_words]  modified_text = 📊 🇱🇧 LBP/USD 🇺🇸 OTC
+🕘 Expiration 5M
+⏺ Entry at 01:30
+🟩 BUY
+
+🔽 Martingale levels 
+1️⃣ level At 01:35
+2️⃣ level At 01:40
+3️⃣ level At 01:45
+2024-10-22 08:21:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] moderation_if_image: False, file_paths: [], moderation_if_image and file_paths: False, modified_message: 📊 🇱🇧 LBP/USD 🇺🇸 OTC
+🕘 Expiration 5M
+⏺ Entry at 01:30
+🟩 BUY
+
+🔽 Martingale levels 
+1️⃣ level At 01:35
+2️⃣ level At 01:40
+3️⃣ level At 01:45
+2024-10-22 08:21:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Автоматическое перенаправление в канал
+2024-10-22 08:21:01 - interceptor.utils - INFO - [update_buttons] Нет кнопок.
+2024-10-22 08:21:01 - interceptor.logger - INFO - [send_message_to_channels] Попытка отправки сообщения
+2024-10-22 08:21:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Старт отправки для канала channel = -1002291645140, Ids сообщений [13912]
+2024-10-22 08:21:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Отправка сообщения в канал клієнтом: -1002291645140
+2024-10-22 08:21:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Завершение отправки сообщений и файлов.
+2024-10-22 08:34:18 - telethon.client.updates - INFO - Got difference for account updates
+2024-10-22 08:40:11 - interceptor.logger - INFO - [add_to_queue] Додаємо месседж до черги. event.id: 13913
+2024-10-22 08:40:11 - interceptor.logger - INFO - [process_queue] Початок обробкі чергі.
+2024-10-22 08:40:11 - interceptor.logger - INFO - [process_queue] Наступний меседж із чергі. event.id:13913
+2024-10-22 08:40:12 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Сообщение от 2009977255 является ответом на сообщение ID 13912.
+2024-10-22 08:40:12 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2024-10-22 08:40:12 - telethon.client.downloads - INFO - File lives in another DC
+2024-10-22 08:40:12 - telethon.network.mtprotosender - INFO - Connecting to 149.154.175.53:443/TcpFull...
+2024-10-22 08:40:13 - telethon.network.mtprotosender - INFO - Connection to 149.154.175.53:443/TcpFull complete!
+2024-10-22 08:40:13 - telethon.client.telegrambaseclient - INFO - Exporting auth for new borrowed sender in DcOption(id=1, ip_address='149.154.175.53', port=443, ipv6=False, media_only=False, tcpo_only=False, cdn=False, static=False, this_port_only=False, secret=None)
+2024-10-22 08:40:14 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Проверяем тип медиа
+2024-10-22 08:40:14 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Тип медиа: <class 'telethon.tl.types.MessageMediaPhoto'>
+2024-10-22 08:40:14 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Медиа является фотографией, добавляем None в message_parts[chat_id]['attributes']
+2024-10-22 08:40:14 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Первое сообщение с файлом получено от 2009977255. Запускаем таймер.
+2024-10-22 08:40:16 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Обрабатывает сообщение из `message_parts`.
+2024-10-22 08:40:16 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Сообщение из канала 2009977255: ✅WIN¹ ✅ - Victory in Martingale 1, Отправитель: None, Файлы: ['storage/photo_2024-10-22_05-40-11.jpg']
+2024-10-22 08:40:16 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Ids сообщений [13913].
+2024-10-22 08:40:16 - interceptor.utils - INFO - [replace_links] ищем ссылки с указанным текстом
+2024-10-22 08:40:16 - interceptor.utils - INFO - [replace_words]  modified_text = ✅WIN¹ ✅ - reach_me_herey in Martingale 1
+2024-10-22 08:40:16 - interceptor.logger - INFO - [process_message][chat_id:2009977255] moderation_if_image: False, file_paths: ['storage/photo_2024-10-22_05-40-11.jpg'], moderation_if_image and file_paths: False, modified_message: ✅WIN¹ ✅ - reach_me_herey in Martingale 1
+2024-10-22 08:40:16 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Автоматическое перенаправление в канал
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: peace
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: eet
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: creer}
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: $400
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: $768
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: eed
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ce
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ead
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: erent
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: me
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: cea
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: aces
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: geertz}
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: een)
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: y
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ”
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ee
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ee
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: cc
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ‘open
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: price:
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: coes
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: cees
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: clot
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: a
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: oie
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: rey
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 08:40:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 08:40:17 - interceptor.utils - INFO - [update_buttons] Нет кнопок.
+2024-10-22 08:40:17 - interceptor.logger - INFO - [send_message_to_channels] Попытка отправки сообщения
+2024-10-22 08:40:17 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Старт отправки для канала channel = -1002291645140, Ids сообщений [13913]
+2024-10-22 08:40:17 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Отправка файла ботом в канал: -1002291645140, файлы: ['storage/photo_2024-10-22_05-40-11.jpg'], buttons: []
+2024-10-22 08:40:17 - telethon.client.uploads - INFO - Uploading file of 30943 bytes in 1 chunks of 131072
+2024-10-22 08:40:18 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Завершение отправки сообщений и файлов.
+2024-10-22 08:41:18 - telethon.client.telegrambaseclient - INFO - Disconnecting borrowed sender for DC 1
+2024-10-22 08:41:18 - telethon.network.mtprotosender - INFO - Disconnecting from 149.154.175.53:443/TcpFull...
+2024-10-22 08:41:18 - telethon.network.mtprotosender - INFO - Disconnection from 149.154.175.53:443/TcpFull complete!
+2024-10-22 08:49:19 - telethon.client.updates - INFO - Got difference for account updates
+2024-10-22 09:04:43 - interceptor.logger - INFO - Request path: /
+2024-10-22 09:04:43 - interceptor.logger - INFO - [start_client_view] Запуск клиента для авторизации.
+2024-10-22 09:04:43 - interceptor.logger - INFO - [start_client_view] Установлен флаг telethon_client_task_running в кэш.
+2024-10-22 09:04:43 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 09:04:43 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 09:04:43 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 09:04:43 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 09:04:43 - interceptor.logger - INFO - Response status code: 302
+2024-10-22 09:20:20 - interceptor.logger - INFO - Request path: /cgi-bin/luci/;stok=/locale
+2024-10-22 09:20:20 - interceptor.logger - INFO - Response status code: 404
+2024-10-22 09:20:20 - django.request - WARNING - Not Found: /cgi-bin/luci/;stok=/locale
+2024-10-22 09:20:21 - interceptor.logger - INFO - Request path: /cgi-bin/luci/;stok=/locale
+2024-10-22 09:20:21 - interceptor.logger - INFO - Response status code: 404
+2024-10-22 09:20:21 - django.request - WARNING - Not Found: /cgi-bin/luci/;stok=/locale
+2024-10-22 09:24:00 - interceptor.logger - INFO - [add_to_queue] Додаємо месседж до черги. event.id: 13914
+2024-10-22 09:24:00 - interceptor.logger - INFO - [process_queue] Початок обробкі чергі.
+2024-10-22 09:24:00 - interceptor.logger - INFO - [process_queue] Наступний меседж із чергі. event.id:13914
+2024-10-22 09:24:01 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Нет медиа вложений
+2024-10-22 09:24:01 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Текстовое сообщение получено от 2009977255. Немедленная обработка.
+2024-10-22 09:24:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Обрабатывает сообщение из `message_parts`.
+2024-10-22 09:24:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Сообщение из канала 2009977255: 📊 🇺🇸 USD/MYR 🇲🇾 OTC
+🕘 Expiration 5M
+⏺ Entry at 02:30
+🟩 BUY
+
+🔽 Martingale levels 
+1️⃣ level At 02:35
+2️⃣ level At 02:40
+3️⃣ level At 02:45, Отправитель: None, Файлы: []
+2024-10-22 09:24:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Ids сообщений [13914].
+2024-10-22 09:24:01 - interceptor.utils - INFO - [replace_links] ищем ссылки с указанным текстом
+2024-10-22 09:24:01 - interceptor.utils - INFO - [replace_words]  modified_text = 📊 🇺🇸 USD/MYR 🇲🇾 OTC
+🕘 Expiration 5M
+⏺ Entry at 02:30
+🟩 BUY
+
+🔽 Martingale levels 
+1️⃣ level At 02:35
+2️⃣ level At 02:40
+3️⃣ level At 02:45
+2024-10-22 09:24:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] moderation_if_image: False, file_paths: [], moderation_if_image and file_paths: False, modified_message: 📊 🇺🇸 USD/MYR 🇲🇾 OTC
+🕘 Expiration 5M
+⏺ Entry at 02:30
+🟩 BUY
+
+🔽 Martingale levels 
+1️⃣ level At 02:35
+2️⃣ level At 02:40
+3️⃣ level At 02:45
+2024-10-22 09:24:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Автоматическое перенаправление в канал
+2024-10-22 09:24:01 - interceptor.utils - INFO - [update_buttons] Нет кнопок.
+2024-10-22 09:24:01 - interceptor.logger - INFO - [send_message_to_channels] Попытка отправки сообщения
+2024-10-22 09:24:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Старт отправки для канала channel = -1002291645140, Ids сообщений [13914]
+2024-10-22 09:24:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Отправка сообщения в канал клієнтом: -1002291645140
+2024-10-22 09:24:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Завершение отправки сообщений и файлов.
+2024-10-22 09:45:13 - interceptor.logger - INFO - [add_to_queue] Додаємо месседж до черги. event.id: 13915
+2024-10-22 09:45:13 - interceptor.logger - INFO - [process_queue] Початок обробкі чергі.
+2024-10-22 09:45:13 - interceptor.logger - INFO - [process_queue] Наступний меседж із чергі. event.id:13915
+2024-10-22 09:45:13 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Сообщение от 2009977255 является ответом на сообщение ID 13914.
+2024-10-22 09:45:13 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2024-10-22 09:45:13 - telethon.client.downloads - INFO - File lives in another DC
+2024-10-22 09:45:13 - telethon.network.mtprotosender - INFO - Connecting to 149.154.175.53:443/TcpFull...
+2024-10-22 09:45:13 - telethon.network.mtprotosender - INFO - Connection to 149.154.175.53:443/TcpFull complete!
+2024-10-22 09:45:13 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Проверяем тип медиа
+2024-10-22 09:45:13 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Тип медиа: <class 'telethon.tl.types.MessageMediaPhoto'>
+2024-10-22 09:45:13 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Медиа является фотографией, добавляем None в message_parts[chat_id]['attributes']
+2024-10-22 09:45:13 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Первое сообщение с файлом получено от 2009977255. Запускаем таймер.
+2024-10-22 09:45:15 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Обрабатывает сообщение из `message_parts`.
+2024-10-22 09:45:15 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Сообщение из канала 2009977255: ✅WIN² ✅ - Victory in Martingale 2, Отправитель: None, Файлы: ['storage/photo_2024-10-22_06-45-12.jpg']
+2024-10-22 09:45:15 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Ids сообщений [13915].
+2024-10-22 09:45:15 - interceptor.utils - INFO - [replace_links] ищем ссылки с указанным текстом
+2024-10-22 09:45:15 - interceptor.utils - INFO - [replace_words]  modified_text = ✅WIN² ✅ - reach_me_herey in Martingale 2
+2024-10-22 09:45:15 - interceptor.logger - INFO - [process_message][chat_id:2009977255] moderation_if_image: False, file_paths: ['storage/photo_2024-10-22_06-45-12.jpg'], moderation_if_image and file_paths: False, modified_message: ✅WIN² ✅ - reach_me_herey in Martingale 2
+2024-10-22 09:45:15 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Автоматическое перенаправление в канал
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: bat
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: teeecrt
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ren
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: bed
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: sir
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ayes)
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ce
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ed
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ere!
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: me
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: oreeety
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: aces
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: payout:
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: $1,536
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: eer)
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ne
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: eee
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: rec)
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ‘open
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: price:
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: cees
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: difference:
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ened
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: reno
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: omens
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 09:45:17 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 09:45:17 - interceptor.utils - INFO - [update_buttons] Нет кнопок.
+2024-10-22 09:45:17 - interceptor.logger - INFO - [send_message_to_channels] Попытка отправки сообщения
+2024-10-22 09:45:17 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Старт отправки для канала channel = -1002291645140, Ids сообщений [13915]
+2024-10-22 09:45:17 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Отправка файла ботом в канал: -1002291645140, файлы: ['storage/photo_2024-10-22_06-45-12.jpg'], buttons: []
+2024-10-22 09:45:17 - telethon.client.uploads - INFO - Uploading file of 29650 bytes in 1 chunks of 131072
+2024-10-22 09:45:18 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Завершение отправки сообщений и файлов.
+2024-10-22 09:46:18 - telethon.client.telegrambaseclient - INFO - Disconnecting borrowed sender for DC 1
+2024-10-22 09:46:18 - telethon.network.mtprotosender - INFO - Disconnecting from 149.154.175.53:443/TcpFull...
+2024-10-22 09:46:18 - telethon.network.mtprotosender - INFO - Disconnection from 149.154.175.53:443/TcpFull complete!
+2024-10-22 09:49:19 - telethon.client.updates - INFO - Got difference for account updates
+2024-10-22 10:01:18 - interceptor.logger - INFO - [add_to_queue] Додаємо месседж до черги. event.id: 7022
+2024-10-22 10:01:18 - interceptor.logger - INFO - [process_queue] Початок обробкі чергі.
+2024-10-22 10:01:18 - interceptor.logger - INFO - [process_queue] Наступний меседж із чергі. event.id:7022
+2024-10-22 10:01:18 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2024-10-22 10:01:19 - telethon.client.downloads - INFO - File lives in another DC
+2024-10-22 10:01:19 - telethon.network.mtprotosender - INFO - Connecting to 91.108.56.100:443/TcpFull...
+2024-10-22 10:03:29 - telethon.network.mtprotosender - WARNING - Attempt 1 at connecting failed: TimeoutError: [Errno 110] Connection timed out
+2024-10-22 10:03:32 - telethon.network.mtprotosender - INFO - Connection to 91.108.56.100:443/TcpFull complete!
+2024-10-22 10:03:32 - telethon.client.telegrambaseclient - INFO - Exporting auth for new borrowed sender in DcOption(id=5, ip_address='91.108.56.100', port=443, ipv6=False, media_only=False, tcpo_only=False, cdn=False, static=False, this_port_only=False, secret=None)
+2024-10-22 10:03:34 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Проверяем тип медиа
+2024-10-22 10:03:34 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Тип медиа: <class 'telethon.tl.types.MessageMediaPhoto'>
+2024-10-22 10:03:34 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Медиа является фотографией, добавляем None в message_parts[chat_id]['attributes']
+2024-10-22 10:03:34 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Первое сообщение с файлом получено от 2023070684. Запускаем таймер.
+2024-10-22 10:03:36 - interceptor.logger - INFO - [process_message][chat_id:2023070684] Обрабатывает сообщение из `message_parts`.
+2024-10-22 10:03:36 - interceptor.logger - INFO - [process_message][chat_id:2023070684] Сообщение из канала 2023070684: #BTC rejected hard from the resistance made and dropped lower to liquidity points and approaching towards the strong support zone area. That would be a healthy option for the market to move higher., Отправитель: None, Файлы: ['storage/photo_2024-10-22_07-00-35.jpg']
+2024-10-22 10:03:36 - interceptor.logger - INFO - [process_message][chat_id:2023070684] Ids сообщений [7022].
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_links] ищем ссылки с указанным текстом
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words]  modified_text = #BTC rejected hard from the resistance made and dropped lower to liquidity points and approaching towards the strong support zone area. That would be a healthy option for the market to move higher.
+2024-10-22 10:03:36 - interceptor.logger - INFO - [process_message][chat_id:2023070684] moderation_if_image: False, file_paths: ['storage/photo_2024-10-22_07-00-35.jpg'], moderation_if_image and file_paths: False, modified_message: #BTC rejected hard from the resistance made and dropped lower to liquidity points and approaching towards the strong support zone area. That would be a healthy option for the market to move higher.
+2024-10-22 10:03:36 - interceptor.logger - INFO - [process_message][chat_id:2023070684] Автоматическое перенаправление в канал
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: i
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: wv
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: pt
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: \
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ih
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:03:36 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:03:36 - interceptor.utils - INFO - [update_buttons] Нет кнопок.
+2024-10-22 10:03:36 - interceptor.logger - INFO - [send_message_to_channels] Попытка отправки сообщения
+2024-10-22 10:03:36 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002313168509] Старт отправки для канала channel = -1002313168509, Ids сообщений [7022]
+2024-10-22 10:03:36 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002313168509] Отправка файла ботом в канал: -1002313168509, файлы: ['storage/photo_2024-10-22_07-00-35.jpg'], buttons: []
+2024-10-22 10:03:36 - telethon.client.uploads - INFO - Uploading file of 83498 bytes in 1 chunks of 131072
+2024-10-22 10:03:37 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002313168509] Завершение отправки сообщений и файлов.
+2024-10-22 10:04:19 - telethon.client.updates - INFO - Got difference for account updates
+2024-10-22 10:05:18 - interceptor.logger - INFO - [add_to_queue] Додаємо месседж до черги. event.id: 7023
+2024-10-22 10:05:18 - interceptor.logger - INFO - [process_queue] Початок обробкі чергі.
+2024-10-22 10:05:18 - interceptor.logger - INFO - [process_queue] Наступний меседж із чергі. event.id:7023
+2024-10-22 10:05:18 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2024-10-22 10:05:18 - telethon.client.downloads - INFO - File lives in another DC
+2024-10-22 10:05:20 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Проверяем тип медиа
+2024-10-22 10:05:20 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Тип медиа: <class 'telethon.tl.types.MessageMediaDocument'>
+2024-10-22 10:05:20 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Медиа является документом, аудио  или видео,  добавляем в message_parts[chat_id]['attributes']
+2024-10-22 10:05:20 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Это видео
+2024-10-22 10:05:20 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Получили атрибуты видео width:1280 , height:1280, duration:1.3
+2024-10-22 10:05:20 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Атрибуты attributes:
+2024-10-22 10:05:20 - interceptor.utils - INFO - Содержимое атрибута DocumentAttributeVideo: { 'duration': 1.3,
+  'h': 1280,
+  'nosound': None,
+  'preload_prefix_size': None,
+  'round_message': None,
+  'supports_streaming': True,
+  'w': 1280}
+2024-10-22 10:05:20 - interceptor.logger - INFO - [process_single_message][chat_id:2023070684] Первое сообщение с файлом получено от 2023070684. Запускаем таймер.
+2024-10-22 10:05:22 - interceptor.logger - INFO - [process_message][chat_id:2023070684] Обрабатывает сообщение из `message_parts`.
+2024-10-22 10:05:22 - interceptor.logger - INFO - [process_message][chat_id:2023070684] Сообщение из канала 2023070684: **Good morning, guys👌**
+
+__Right now I am observing a reversal movement in the selected coin! 
+
+Local trends are suitable for short-term trading and we will actively use this throughout the trading session__
+
+**RIGHT NOW is the best time to enter a trade 👇👇👇**
+
+text me: @SamCrypto_Master, Отправитель: None, Файлы: ['storage/IMG_7920.MP4']
+2024-10-22 10:05:22 - interceptor.logger - INFO - [process_message][chat_id:2023070684] Ids сообщений [7023].
+2024-10-22 10:05:22 - interceptor.utils - INFO - [replace_links] ищем ссылки с указанным текстом
+2024-10-22 10:05:22 - interceptor.utils - INFO - [replace_words]  modified_text = **Good morning, guys👌**
+
+__Right now I am observing a reversal movement in the selected coin! 
+
+Local trends are suitable for short-term trading and we will actively use this throughout the trading session__
+
+**RIGHT NOW is the best time to enter a trade 👇👇👇**
+
+text me: @reach_me_here
+2024-10-22 10:05:22 - interceptor.logger - INFO - [process_message][chat_id:2023070684] moderation_if_image: False, file_paths: ['storage/IMG_7920.MP4'], moderation_if_image and file_paths: False, modified_message: **Good morning, guys👌**
+
+__Right now I am observing a reversal movement in the selected coin! 
+
+Local trends are suitable for short-term trading and we will actively use this throughout the trading session__
+
+**RIGHT NOW is the best time to enter a trade 👇👇👇**
+
+text me: @reach_me_here
+2024-10-22 10:05:22 - interceptor.logger - INFO - [process_message][chat_id:2023070684] Автоматическое перенаправление в канал
+2024-10-22 10:05:22 - interceptor.utils - INFO - [replace_words_in_images] Файл storage/IMG_7920.MP4 не является изображением
+2024-10-22 10:05:22 - interceptor.utils - INFO - [update_buttons] Нет кнопок.
+2024-10-22 10:05:22 - interceptor.logger - INFO - [send_message_to_channels] Попытка отправки сообщения
+2024-10-22 10:05:22 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002313168509] Старт отправки для канала channel = -1002313168509, Ids сообщений [7023]
+2024-10-22 10:05:22 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002313168509] Отправка файла ботом в канал: -1002313168509, файлы: ['storage/IMG_7920.MP4'], buttons: []
+2024-10-22 10:05:22 - telethon.client.uploads - INFO - Uploading file of 461878 bytes in 4 chunks of 131072
+2024-10-22 10:05:24 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002313168509] Завершение отправки сообщений и файлов.
+2024-10-22 10:06:33 - telethon.client.telegrambaseclient - INFO - Disconnecting borrowed sender for DC 5
+2024-10-22 10:06:33 - telethon.network.mtprotosender - INFO - Disconnecting from 91.108.56.100:443/TcpFull...
+2024-10-22 10:06:33 - telethon.network.mtprotosender - INFO - Disconnection from 91.108.56.100:443/TcpFull complete!
+2024-10-22 10:16:32 - interceptor.logger - INFO - Request path: /
+2024-10-22 10:16:32 - interceptor.logger - INFO - [start_client_view] Запуск клиента для авторизации.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [start_client_view] Установлен флаг telethon_client_task_running в кэш.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:16:32 - interceptor.logger - INFO - Response status code: 302
+2024-10-22 10:16:32 - interceptor.logger - INFO - Request path: /messages
+2024-10-22 10:16:32 - interceptor.logger - INFO - [message_list_and_edit] View для работы с сообщениями и их пересылки.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [message_list_and_edit] Перевірка client.connect
+2024-10-22 10:16:32 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:16:32 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:32 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:32 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:32 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:32 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:32 - interceptor.logger - INFO - Response status code: 200
+2024-10-22 10:16:33 - interceptor.logger - INFO - Request path: /
+2024-10-22 10:16:33 - interceptor.logger - INFO - [start_client_view] Запуск клиента для авторизации.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [start_client_view] Установлен флаг telethon_client_task_running в кэш.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:16:33 - interceptor.logger - INFO - Response status code: 302
+2024-10-22 10:16:33 - interceptor.logger - INFO - Request path: /messages
+2024-10-22 10:16:33 - interceptor.logger - INFO - [message_list_and_edit] View для работы с сообщениями и их пересылки.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [message_list_and_edit] Перевірка client.connect
+2024-10-22 10:16:33 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:16:33 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:33 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:33 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:33 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:33 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:16:33 - interceptor.logger - INFO - Response status code: 200
+2024-10-22 10:19:20 - telethon.client.updates - INFO - Got difference for account updates
+2024-10-22 10:21:26 - interceptor.logger - INFO - Request path: /
+2024-10-22 10:21:26 - interceptor.logger - INFO - [start_client_view] Запуск клиента для авторизации.
+2024-10-22 10:21:26 - interceptor.logger - INFO - [start_client_view] Установлен флаг telethon_client_task_running в кэш.
+2024-10-22 10:21:26 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:21:26 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:21:26 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:21:26 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:21:26 - interceptor.logger - INFO - Response status code: 302
+2024-10-22 10:23:19 - telethon.network.connection.connection - WARNING - Server closed the connection: [Errno 104] Connection reset by peer
+2024-10-22 10:23:19 - telethon.network.mtprotosender - INFO - Connection closed while receiving data: [Errno 104] Connection reset by peer
+2024-10-22 10:23:19 - telethon.network.mtprotosender - INFO - Closing current connection to begin reconnect...
+2024-10-22 10:23:19 - telethon.network.mtprotosender - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2024-10-22 10:23:19 - telethon.network.connection.connection - INFO - <class 'ConnectionResetError'> during disconnect: [Errno 104] Connection reset by peer
+2024-10-22 10:23:19 - telethon.network.mtprotosender - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2024-10-22 10:25:00 - interceptor.logger - INFO - [add_to_queue] Додаємо месседж до черги. event.id: 13916
+2024-10-22 10:25:00 - interceptor.logger - INFO - [process_queue] Початок обробкі чергі.
+2024-10-22 10:25:00 - interceptor.logger - INFO - [process_queue] Наступний меседж із чергі. event.id:13916
+2024-10-22 10:25:01 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Нет медиа вложений
+2024-10-22 10:25:01 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Текстовое сообщение получено от 2009977255. Немедленная обработка.
+2024-10-22 10:25:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Обрабатывает сообщение из `message_parts`.
+2024-10-22 10:25:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Сообщение из канала 2009977255: 📊 🇳🇿 NZD/USD 🇺🇸 OTC
+🕘 Expiration 5M
+⏺ Entry at 03:30
+🟥 SELL
+
+🔽 Martingale levels 
+1️⃣ level At 03:35
+2️⃣ level At 03:40
+3️⃣ level At 03:45, Отправитель: None, Файлы: []
+2024-10-22 10:25:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Ids сообщений [13916].
+2024-10-22 10:25:01 - interceptor.utils - INFO - [replace_links] ищем ссылки с указанным текстом
+2024-10-22 10:25:01 - interceptor.utils - INFO - [replace_words]  modified_text = 📊 🇳🇿 NZD/USD 🇺🇸 OTC
+🕘 Expiration 5M
+⏺ Entry at 03:30
+🟥 SELL
+
+🔽 Martingale levels 
+1️⃣ level At 03:35
+2️⃣ level At 03:40
+3️⃣ level At 03:45
+2024-10-22 10:25:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] moderation_if_image: False, file_paths: [], moderation_if_image and file_paths: False, modified_message: 📊 🇳🇿 NZD/USD 🇺🇸 OTC
+🕘 Expiration 5M
+⏺ Entry at 03:30
+🟥 SELL
+
+🔽 Martingale levels 
+1️⃣ level At 03:35
+2️⃣ level At 03:40
+3️⃣ level At 03:45
+2024-10-22 10:25:01 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Автоматическое перенаправление в канал
+2024-10-22 10:25:01 - interceptor.utils - INFO - [update_buttons] Нет кнопок.
+2024-10-22 10:25:01 - interceptor.logger - INFO - [send_message_to_channels] Попытка отправки сообщения
+2024-10-22 10:25:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Старт отправки для канала channel = -1002291645140, Ids сообщений [13916]
+2024-10-22 10:25:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Отправка сообщения в канал клієнтом: -1002291645140
+2024-10-22 10:25:01 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Завершение отправки сообщений и файлов.
+2024-10-22 10:26:24 - interceptor.logger - INFO - Request path: /
+2024-10-22 10:26:24 - interceptor.logger - INFO - [start_client_view] Запуск клиента для авторизации.
+2024-10-22 10:26:24 - interceptor.logger - INFO - [start_client_view] Установлен флаг telethon_client_task_running в кэш.
+2024-10-22 10:26:24 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:26:24 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:26:24 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:26:24 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:26:24 - interceptor.logger - INFO - Response status code: 302
+2024-10-22 10:26:25 - interceptor.logger - INFO - Request path: /messages
+2024-10-22 10:26:25 - interceptor.logger - INFO - [message_list_and_edit] View для работы с сообщениями и их пересылки.
+2024-10-22 10:26:25 - interceptor.logger - INFO - [message_list_and_edit] Перевірка client.connect
+2024-10-22 10:26:25 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:26:25 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:26:25 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:26:25 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:26:25 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:25 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:25 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:25 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:25 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:25 - interceptor.logger - INFO - Response status code: 200
+2024-10-22 10:26:26 - interceptor.logger - INFO - Request path: /
+2024-10-22 10:26:26 - interceptor.logger - INFO - [start_client_view] Запуск клиента для авторизации.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [start_client_view] Установлен флаг telethon_client_task_running в кэш.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:26:26 - interceptor.logger - INFO - Response status code: 302
+2024-10-22 10:26:26 - interceptor.logger - INFO - Request path: /messages
+2024-10-22 10:26:26 - interceptor.logger - INFO - [message_list_and_edit] View для работы с сообщениями и их пересылки.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [message_list_and_edit] Перевірка client.connect
+2024-10-22 10:26:26 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли клиент.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [createClients] Проверяем законекчен ли бот клиент.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [createClients] Клиент есть и законекчен.
+2024-10-22 10:26:26 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:26 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:26 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:26 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:26 - interceptor.logger - INFO - [start_client] Обработчики NewMessage уже были зарегестрированы
+2024-10-22 10:26:26 - interceptor.logger - INFO - Response status code: 200
+2024-10-22 10:40:11 - interceptor.logger - INFO - [add_to_queue] Додаємо месседж до черги. event.id: 13917
+2024-10-22 10:40:11 - interceptor.logger - INFO - [process_queue] Початок обробкі чергі.
+2024-10-22 10:40:11 - interceptor.logger - INFO - [process_queue] Наступний меседж із чергі. event.id:13917
+2024-10-22 10:40:12 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Сообщение от 2009977255 является ответом на сообщение ID 13916.
+2024-10-22 10:40:12 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2024-10-22 10:40:12 - telethon.client.downloads - INFO - File lives in another DC
+2024-10-22 10:40:12 - telethon.network.mtprotosender - INFO - Connecting to 149.154.175.53:443/TcpFull...
+2024-10-22 10:40:12 - telethon.network.mtprotosender - INFO - Connection to 149.154.175.53:443/TcpFull complete!
+2024-10-22 10:40:12 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Проверяем тип медиа
+2024-10-22 10:40:12 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Тип медиа: <class 'telethon.tl.types.MessageMediaPhoto'>
+2024-10-22 10:40:12 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Медиа является фотографией, добавляем None в message_parts[chat_id]['attributes']
+2024-10-22 10:40:12 - interceptor.logger - INFO - [process_single_message][chat_id:2009977255] Первое сообщение с файлом получено от 2009977255. Запускаем таймер.
+2024-10-22 10:40:14 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Обрабатывает сообщение из `message_parts`.
+2024-10-22 10:40:14 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Сообщение из канала 2009977255: ✅WIN¹ ✅ - Victory in Martingale 1, Отправитель: None, Файлы: ['storage/photo_2024-10-22_07-40-11.jpg']
+2024-10-22 10:40:14 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Ids сообщений [13917].
+2024-10-22 10:40:14 - interceptor.utils - INFO - [replace_links] ищем ссылки с указанным текстом
+2024-10-22 10:40:14 - interceptor.utils - INFO - [replace_words]  modified_text = ✅WIN¹ ✅ - reach_me_herey in Martingale 1
+2024-10-22 10:40:14 - interceptor.logger - INFO - [process_message][chat_id:2009977255] moderation_if_image: False, file_paths: ['storage/photo_2024-10-22_07-40-11.jpg'], moderation_if_image and file_paths: False, modified_message: ✅WIN¹ ✅ - reach_me_herey in Martingale 1
+2024-10-22 10:40:14 - interceptor.logger - INFO - [process_message][chat_id:2009977255] Автоматическое перенаправление в канал
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ban
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: toreret)
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: cece}
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ~
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: $400
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ie)
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: peed
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ce
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ead
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: 02:34:59,009
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: me
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: eet
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: stace
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: eal
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: payout:
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: $768
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: eee
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: nc
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: oe
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ee
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: reed
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: ‘open
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: price:
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: cees
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: cees
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: cow
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: bed
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] Распознано слово: anno
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] replKey: @samcrypto_master
+2024-10-22 10:40:15 - interceptor.utils - INFO - [replace_words_in_images] ind: -1
+2024-10-22 10:40:15 - interceptor.utils - INFO - [update_buttons] Нет кнопок.
+2024-10-22 10:40:15 - interceptor.logger - INFO - [send_message_to_channels] Попытка отправки сообщения
+2024-10-22 10:40:15 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Старт отправки для канала channel = -1002291645140, Ids сообщений [13917]
+2024-10-22 10:40:15 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Отправка файла ботом в канал: -1002291645140, файлы: ['storage/photo_2024-10-22_07-40-11.jpg'], buttons: []
+2024-10-22 10:40:15 - telethon.client.uploads - INFO - Uploading file of 30420 bytes in 1 chunks of 131072
+2024-10-22 10:40:16 - interceptor.logger - INFO - [send_message_to_channels][channel:-1002291645140] Завершение отправки сообщений и файлов.
+2024-10-22 10:41:33 - telethon.client.telegrambaseclient - INFO - Disconnecting borrowed sender for DC 1
+2024-10-22 10:41:33 - telethon.network.mtprotosender - INFO - Disconnecting from 149.154.175.53:443/TcpFull...
+2024-10-22 10:41:33 - telethon.network.mtprotosender - INFO - Disconnection from 149.154.175.53:443/TcpFull complete!
