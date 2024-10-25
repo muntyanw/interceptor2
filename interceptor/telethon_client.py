@@ -17,6 +17,8 @@ from telethon.tl.custom.messagebutton import MessageButton
 from telethon.tl.types import DocumentAttributeVideo, DocumentAttributeFilename
 import pprint
 from django.conf import settings
+from pydub.utils import mediainfo
+from telethon.tl.types import DocumentAttributeAudio
 
 
 # Инициализация pprint
@@ -148,20 +150,20 @@ async def process_message(chat_id, reply_to_msg_id=None):
     files = message_data['files']
     message_text = message_data['text'] or ""
     
-    if 'webpage' in message_parts[chat_id]:
-        logger.info(f"[process_message][chat_id:{chat_id}] Найдена приставка webpage:{message_data['webpage']} Добавляем ее к сообщению.!")
-        message_text += f"\n\n{message_data['webpage']}"
+    #if 'webpage' in message_parts[chat_id]:
+        #logger.info(f"[process_message][chat_id:{chat_id}] Найдена приставка webpage:{message_data['webpage']} Добавляем ее к сообщению.!")
+        #message_text += f"\n\n{message_data['webpage']}"
     
     sender_name = message_data['sender_name']
     buttons = message_data.get('buttons', None)
     attributes = message_data.get('attributes', None) 
     isTgsticker = message_data.get('isTgsticker', None)
     messageIds = message_data.get('messageIds', None)
-    isVoice = message_data['isVoice']
+    isVoice = message_data.get('isVoice', None)
     
     logger.info(f"[process_message][chat_id:{chat_id}] Сообщение из канала {chat_id}: {message_text}, Отправитель: {sender_name}, Файлы: {files}")
     
-    logger.info(f"[process_message][chat_id:{chat_id}] Ids сообщений {message_parts[chat_id]['messageIds']}.")
+    logger.info(f"[process_message][chat_id:{chat_id}] Ids сообщений {messageIds}.")
     
     try:
         get_first_setting = sync_to_async(AutoSendMessageSetting.objects.first)
@@ -256,6 +258,7 @@ async def process_single_message(event):
    
    file_path = None
    
+   logger.info(f"[process_single_message][chat_id:{chat_id}] Ищем медиа")
    if message.media:
         file_path = await message.download_media(file=download_directory)
         logger.info(f"[process_single_message][chat_id:{chat_id}] Проверяем тип медиа")
@@ -272,14 +275,12 @@ async def process_single_message(event):
                 width, height, duration, fps = utils.get_video_dimensions_cv2(file_path)
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Получили атрибуты видео width:{width} , height:{height}, duration:{duration}")
                  # Создание атрибутов для видео
-                video_attributes = [
-                    DocumentAttributeVideo(
-                        duration=duration,
-                        w=width,
-                        h=height,
-                        supports_streaming=True
-                    )
-                ]
+                video_attributes = DocumentAttributeVideo(
+                                        duration=duration,
+                                        w=width,
+                                        h=height,
+                                        supports_streaming=True
+                                   )
                 message_parts[chat_id].setdefault('attributes', []).append(video_attributes)
 
 
@@ -294,21 +295,20 @@ async def process_single_message(event):
             if utils.has_file_with_extensions([file_path], ['.ogg', '.oga']):
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Это войс")
                 message_parts[chat_id]['isVoice'] = True
-                output_file = utils.change_file_extension(file_path, 'mp4')
-                utils.convert_round_video(file_path, output_file)
+                output_file = utils.change_file_extension(file_path, 'mp3')
+                utils.convert_oga_to_mp3(file_path, output_file)
                 file_path = output_file
 
-                # Создание атрибутов видео
-                video_attributes = [
-                    DocumentAttributeVideo(
-                        duration=10,
-                        w=240,
-                        h=240,
-                        round_message=True,
-                        supports_streaming=True
-                    )
-                ]
-                message_parts[chat_id].setdefault('attributes', []).append(video_attributes)
+                info = mediainfo(file_path)
+                duration = int(float(info['duration']))
+
+                audio_attributes = DocumentAttributeAudio(
+                                duration=duration,
+                                voice=True, 
+                        
+                             )
+                
+                message_parts[chat_id].setdefault('attributes', []).append(audio_attributes)
 
             logger.info(f"[process_single_message][chat_id:{chat_id}] Атрибуты attributes:")
             utils.log_attributes(message_parts[chat_id]['attributes'])
@@ -336,7 +336,7 @@ async def process_single_message(event):
             message_parts[chat_id]['text'] = message.text
             message_parts[chat_id]['buttons'] = buttons
             
-            if not message_parts[chat_id]['isTgsticker']:
+            if not message_parts[chat_id].get('isTgsticker', False):
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Первое сообщение с файлом получено от {chat_id}. Запускаем таймер.")
                 await asyncio.sleep(COLLECT_TIMEOUT)
             else:

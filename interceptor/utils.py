@@ -13,26 +13,37 @@ from telethon.tl.custom.messagebutton import MessageButton
 import pprint
 from moviepy.editor import VideoFileClip
 from collections.abc import Iterable
+from pydub import AudioSegment
+import ffmpeg
 
 # Инициализация pprint
 pp = pprint.PrettyPrinter(indent=2)
 
 logger = logging.getLogger(__name__)
 
+def logOneAttribut(attribute):
+    if hasattr(attribute, '__dict__'):
+        logger.info(f"[log_attributes] Содержимое атрибута {attribute.__class__.__name__}: {pp.pformat(attribute.__dict__)}")
+    else:
+        # Если __dict__ нет, просто выводим объект
+        logger.info(f"[log_attributes] Неизвестный атрибут: {attribute}")
+
 # Функция для логирования атрибутов
 def log_attributes(attributes):
     if attributes:
+        logger.info(f"[log_attributes] attributes не пустий.")
         for attribute_list in attributes:
             if attribute_list and isinstance(attribute_list, Iterable):
                 for attribute in attribute_list:
-                    # Используем __dict__, чтобы получить содержимое атрибутов
-                    if hasattr(attribute, '__dict__'):
-                        logger.info(f"Содержимое атрибута {attribute.__class__.__name__}: {pp.pformat(attribute.__dict__)}")
-                    else:
-                        # Если __dict__ нет, просто выводим объект
-                        logger.info(f"Неизвестный атрибут: {attribute}")
+                    logOneAttribut(attribute)
+            else:
+                if attribute_list:
+                    logger.info(f"[log_attributes] attribute_list not iterable.")
+                    logOneAttribut(attribute_list)
+                else:
+                    logger.info(f"[log_attributes] attribute_list empty.")
     else:
-        logger.info(f"Нет атрибутов.")
+        logger.info(f"[log_attributes] Нет атрибутов.")
 
 def is_image_file(file_path):
     # Добавляем проверку на None
@@ -458,6 +469,24 @@ def convert_round_video(input_file, output_file):
     except Exception as e:
         logger.info(f"[convert_round_video] Ошибка при конвертации: {e}")
 
+def convert_oga_to_mp3(input_file, output_file):
+    """
+    Конвертирует аудиофайл из .oga в .mp3.
+
+    :param input_file: Путь к входному .oga файлу.
+    :param output_file: Путь для сохранения выходного .mp3 файла.
+    """
+    try:
+        logger.info(f"[convert_oga_to_mp3] Загрузка .oga файла {input_file}")
+        
+        # Использование ffmpeg для конвертации
+        ffmpeg.input(input_file).output(output_file, format='mp3').run(overwrite_output=True)
+        
+        logger.info(f"[convert_oga_to_mp3] Файл успешно конвертирован и сохранен как {output_file}")
+        
+    except Exception as e:
+        logger.info(f"[convert_oga_to_mp3] Ошибка при конвертации: {e}")
+
 def change_file_extension(file_path, new_extension):
     """
     Заменяет расширение файла на заданное.
@@ -502,7 +531,7 @@ def is_video_file(file_path):
     :return: True, если файл является видео, иначе False.
     """
     # Список расширений видеофайлов
-    video_extensions = {".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".ogg", ".ogv", ".oga", ".m4v"}
+    video_extensions = {".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".m4v"}
     
     # Получаем расширение файла
     file_extension = file_path.lower().split('.')[-1]

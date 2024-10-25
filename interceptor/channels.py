@@ -5,6 +5,12 @@ bot_token = '7738836203:AAHY-A-TUXd-izs-zP8DlsBandrxgjf5OGw' #'7905362232:AAHV2i
 name_session_client = 'sessionTC'
 name_session_bot = 'sessionBot'
 
+# сначала меняются урлы, потом идут замены текста
+replacement_urls = { # если ссылка содержит в себе первое слово, то вся она меняется на второе слово
+    "bingx": "https://www.binance.com",
+    "t.me": "https://www.binance.com",
+}
+
 #каналы которые слушаем без -100!
 channels_to_listen = {
     2023070684: { #Crypto Master | Futures Signals
@@ -25,7 +31,7 @@ channels_to_listen = {
             'bingx': 'google',
             'Bingx': 'Google',
             'Victor Trader': 'reach_me_here',
-            'Victor': 'reach_me_here',
+            'Victor ': 'reach_me_here',
             '@reach_me_here':'https://www.binance.com',
             'https://t.me/c/2009977255/12895':'https://www.binance.com',
             'https://bit.ly/safebestbroker':'https://bit.ly/4gK7frD',
@@ -49,10 +55,7 @@ replacements_in_buttons = {
      'FAQ': 'https://www.binance.com'
  }
 
-replacement_urls = { # если ссылка содержит в себе первое слово, то вся она меняется на второе слово
-    "bingx": "https://www.binance.com",
-    "t.me": "https://www.binance.com",
-}
+
 
 
 
