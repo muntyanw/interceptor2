@@ -54,6 +54,15 @@ def is_image_file(file_path):
     ext = os.path.splitext(file_path)[1].lower()
     return ext in ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.tiff']
 
+def is_sticker(file_path):
+    # Добавляем проверку на None
+    if file_path is None:
+        logger.error("[is_image_file] Путь к файлу не должен быть None.")
+        return False
+
+    ext = os.path.splitext(file_path)[1].lower()
+    return ext in ['.webp']
+
 def replace_words(text, channel_id):
     channel_info = channels.channels_to_listen.get(channel_id, {})
     replacements = channel_info.get('replacements', {})
@@ -538,6 +547,11 @@ def is_video_file(file_path):
     
     # Проверяем, есть ли расширение в списке видео
     return f".{file_extension}" in video_extensions
+
+def add_closing_bracket_if_needed(text):
+    if text.count('(') > text.count(')'):
+        text += ')'
+    return text
 
 
 

@@ -32,6 +32,7 @@ channels_to_listen = {
             'Bingx': 'Google',
             'Victor Trader': 'reach_me_here',
             'Victor ': 'reach_me_here',
+            'reach_me_herey ': 'Victory',
             '@reach_me_here':'https://www.binance.com',
             'https://t.me/c/2009977255/12895':'https://www.binance.com',
             'https://bit.ly/safebestbroker':'https://bit.ly/4gK7frD',

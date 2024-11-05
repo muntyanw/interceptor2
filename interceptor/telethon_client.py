@@ -21,6 +21,8 @@ from pydub.utils import mediainfo
 from telethon.tl.types import DocumentAttributeAudio
 
 
+MAX_CAPTION_LENGTH = 1024
+
 # Инициализация pprint
 pp = pprint.PrettyPrinter(indent=2)
 
@@ -150,9 +152,9 @@ async def process_message(chat_id, reply_to_msg_id=None):
     files = message_data['files']
     message_text = message_data['text'] or ""
     
-    #if 'webpage' in message_parts[chat_id]:
-        #logger.info(f"[process_message][chat_id:{chat_id}] Найдена приставка webpage:{message_data['webpage']} Добавляем ее к сообщению.!")
-        #message_text += f"\n\n{message_data['webpage']}"
+    if 'webpage' in message_parts[chat_id]:
+        logger.info(f"[process_message][chat_id:{chat_id}] Найдена приставка webpage:{message_data['webpage']} Добавляем ее к сообщению.!")
+        message_text += message_data['webpage']
     
     sender_name = message_data['sender_name']
     buttons = message_data.get('buttons', None)
@@ -284,7 +286,7 @@ async def process_single_message(event):
                 message_parts[chat_id].setdefault('attributes', []).append(video_attributes)
 
 
-            if document.mime_type == 'application/x-tgsticker' and document.attributes:
+            if utils.is_sticker(file_path) or (document.mime_type == 'application/x-tgsticker' and document.attributes):
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Это стикер")
                 if any(hasattr(attr, 'type') and attr.type == 'animation' for attr in document.attributes):
                     logger.info(f"[process_single_message][chat_id:{chat_id}] Это анимированный стикер")
@@ -318,11 +320,12 @@ async def process_single_message(event):
             message_parts[chat_id].setdefault('attributes', []).append(None)
             
         elif isinstance(message.media, types.MessageMediaWebPage):
-            webpage = message.media.webpage
-            # Сохраняем атрибуты веб-страницы
-            webpage_info = f"URL: {webpage.url}\nЗаголовок: {webpage.title}\nОписание: {webpage.description}"
-            message_parts[chat_id]['webpage'] = webpage_info
-            message_parts[chat_id].setdefault('attributes', []).append(None)
+            # Извлекаем ссылку из объекта MessageMediaWebPage
+            web_page = message.media.webpage
+            if isinstance(web_page, types.WebPage):
+                url = web_page.url
+                message_parts[chat_id]['webpage'] =f"\{url}"
+                message_parts[chat_id].setdefault('attributes', []).append(None)
             
         else:
             logger.info(f"[process_single_message][chat_id:{chat_id}] Неизвестный тип медиа")
@@ -350,6 +353,12 @@ async def process_single_message(event):
                 message_parts[chat_id]['buttons'].append(buttons)
             if message.text:
                 message_parts[chat_id]['text'] += message.text
+
+        if message_parts[chat_id].get('text') and len(message_parts[chat_id]['text']) > MAX_CAPTION_LENGTH:
+                message_parts[chat_id]['text'] = message_parts[chat_id]['text'][:MAX_CAPTION_LENGTH]
+
+        message_parts[chat_id]['text'] = utils.add_closing_bracket_if_needed(message_parts[chat_id]['text'])
+
    else:
        
         logger.info(f"[process_single_message][chat_id:{chat_id}] Нет медиа вложений")
