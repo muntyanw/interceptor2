@@ -7,8 +7,8 @@ name_session_bot = 'sessionBot'
 
 # сначала меняются урлы, потом идут замены текста
 replacement_urls = { # если ссылка содержит в себе первое слово, то вся она меняется на второе слово
-    "bingx": "https://www.binance.com",
-    "t.me": "https://www.binance.com",
+    "bingx": "https://t.me/reach_me_here",
+    "t.me": "https://t.me/reach_me_here",
 }
 
 #каналы которые слушаем без -100!
@@ -33,11 +33,14 @@ channels_to_listen = {
             'Victor Trader': 'reach_me_here',
             'Victor ': 'reach_me_here',
             'reach_me_herey ': 'Victory',
-            '@reach_me_here':'https://www.binance.com',
-            'https://t.me/c/2009977255/12895':'https://www.binance.com',
+            'victortraderofficialsupport':'reach_me_here',
+            # '@reach_me_here':'https://www.binance.com',
+            'https://t.me/c/2009977255/12895':'https://t.me/reach_me_here',
             'https://bit.ly/safebestbroker':'https://bit.ly/4gK7frD',
             'https://t.me/victortraderofficialsupport':'@reach_me_here',
-            'https://t.me/c/2009977255/13812':'https://www.binance.com',
+            'https://t.me/c/2009977255/13812':'@reach_me_here',
+            '(https://t.me/reach_me_here':'https://t.me/reach_me_here',
+            '\https://bit.ly/4gK7frD':'https://bit.ly/4gK7frD',
         },
         'channels_to_send': [-1002291645140] #каналы куда отсылаем каналы с -100
     },   
@@ -50,10 +53,11 @@ replacements_in_images = { # ключи (первое слово) в нижне�
 
 # # Словарь с заменами (текущий текст кнопки -> новая ссылка)
 replacements_in_buttons = {
+    'INSTRUCTIONS HERE':'https://t.me/reach_me_here',
      'OPEN BROKER': 'https://bit.ly/4gK7frD',
-     'CONTACT SUPPORT': 'https://bit.ly/4gK7frD',
-     '⤴️ SHARE RESULTS': 'https://www.binance.com',
-     'FAQ': 'https://www.binance.com'
+     'CONTACT SUPPORT': 'https://t.me/reach_me_here',
+     '⤴️ SHARE RESULTS': 'https://t.me/reach_me_here',
+     'FAQ': 'https://t.me/reach_me_here'
  }
 
 

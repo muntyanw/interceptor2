@@ -277,12 +277,12 @@ async def process_single_message(event):
                 width, height, duration, fps = utils.get_video_dimensions_cv2(file_path)
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Получили атрибуты видео width:{width} , height:{height}, duration:{duration}")
                  # Создание атрибутов для видео
-                video_attributes = DocumentAttributeVideo(
+                video_attributes = [DocumentAttributeVideo(
                                         duration=duration,
                                         w=width,
                                         h=height,
                                         supports_streaming=True
-                                   )
+                                   )]
                 message_parts[chat_id].setdefault('attributes', []).append(video_attributes)
 
 
@@ -304,11 +304,11 @@ async def process_single_message(event):
                 info = mediainfo(file_path)
                 duration = int(float(info['duration']))
 
-                audio_attributes = DocumentAttributeAudio(
+                audio_attributes = [DocumentAttributeAudio(
                                 duration=duration,
                                 voice=True, 
                         
-                             )
+                             )]
                 
                 message_parts[chat_id].setdefault('attributes', []).append(audio_attributes)
 

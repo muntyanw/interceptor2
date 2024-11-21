@@ -435,14 +435,14 @@ def replace_links(text, replacement_urls):
     Заменяет ссылки в тексте в соответствии с заданными правилами.
     
     :param text: Исходный текст, в котором ищем и заменяем ссылки.
-    :param replacements: Словарь, где ключи - это строки, которые ищем в ссылках,
-                         а значения - текст, на который заменяем ссылки.
+    :param replacement_urls: Словарь, где ключи - это строки, которые ищем в ссылках,
+                              а значения - текст, на который заменяем ссылки.
     :return: Измененный текст.
     """
 
     logger.info(f"[replace_links] ищем ссылки с указанным текстом")
-    # Регулярное выражение для поиска ссылок
-    link_pattern = re.compile(r'https?://[^\s]+')
+    # Регулярное выражение для поиска ссылок, исключая символы *, примыкающие к ссылке
+    link_pattern = re.compile(r'https?://[^\s\*]+')
     
     # Функция для замены ссылок в зависимости от соответствий
     def replace_match(match):
@@ -549,7 +549,7 @@ def is_video_file(file_path):
     return f".{file_extension}" in video_extensions
 
 def add_closing_bracket_if_needed(text):
-    if text.count('(') > text.count(')'):
+    if text is not None and text.count('(') > text.count(')'):
         text += ')'
     return text
 
