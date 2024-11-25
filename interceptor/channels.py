@@ -39,8 +39,8 @@ channels_to_listen = {
             'https://bit.ly/safebestbroker':'https://bit.ly/4gK7frD',
             'https://t.me/victortraderofficialsupport':'@reach_me_here',
             'https://t.me/c/2009977255/13812':'@reach_me_here',
-            '(https://t.me/reach_me_here':'https://t.me/reach_me_here',
-            '\https://bit.ly/4gK7frD':'https://bit.ly/4gK7frD',
+            #'(https://t.me/reach_me_here':'https://t.me/reach_me_here',
+            #'\https://bit.ly/4gK7frD':'https://bit.ly/4gK7frD',
         },
         'channels_to_send': [-1002291645140] #каналы куда отсылаем каналы с -100
     },   

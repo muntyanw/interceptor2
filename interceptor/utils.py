@@ -32,16 +32,19 @@ def logOneAttribut(attribute):
 def log_attributes(attributes):
     if attributes:
         logger.info(f"[log_attributes] attributes не пустий.")
-        for attribute_list in attributes:
-            if attribute_list and isinstance(attribute_list, Iterable):
-                for attribute in attribute_list:
-                    logOneAttribut(attribute)
-            else:
-                if attribute_list:
-                    logger.info(f"[log_attributes] attribute_list not iterable.")
-                    logOneAttribut(attribute_list)
+        if isinstance(attributes, Iterable):
+            for attribute_list in attributes:
+                if attribute_list and isinstance(attribute_list, Iterable):
+                    for attribute in attribute_list:
+                        logOneAttribut(attribute)
                 else:
-                    logger.info(f"[log_attributes] attribute_list empty.")
+                    if attribute_list:
+                        logger.info(f"[log_attributes] attribute_list not iterable.")
+                        logOneAttribut(attribute_list)
+                    else:
+                        logger.info(f"[log_attributes] attribute_list empty.")
+        else:
+            logOneAttribut(attributes)
     else:
         logger.info(f"[log_attributes] Нет атрибутов.")
 
@@ -64,6 +67,7 @@ def is_sticker(file_path):
     return ext in ['.webp']
 
 def replace_words(text, channel_id):
+    logger.info(f"[replace_words]  text = {text}")
     channel_info = channels.channels_to_listen.get(channel_id, {})
     replacements = channel_info.get('replacements', {})
 
@@ -430,6 +434,11 @@ def removeFilesSessions(settings):
 
     logger.info("[removeFilesSessions] Клиентская сессия удалена.")
 
+import re
+import logging
+
+logger = logging.getLogger(__name__)
+
 def replace_links(text, replacement_urls):
     """
     Заменяет ссылки в тексте в соответствии с заданными правилами.
@@ -441,8 +450,8 @@ def replace_links(text, replacement_urls):
     """
 
     logger.info(f"[replace_links] ищем ссылки с указанным текстом")
-    # Регулярное выражение для поиска ссылок, исключая символы *, примыкающие к ссылке
-    link_pattern = re.compile(r'https?://[^\s\*]+')
+    # Регулярное выражение для поиска ссылок, исключая *, ), и пробелы на границе
+    link_pattern = re.compile(r'https?://[^\s\*\)]+')
     
     # Функция для замены ссылок в зависимости от соответствий
     def replace_match(match):
@@ -457,7 +466,10 @@ def replace_links(text, replacement_urls):
         return link  # Если совпадений нет, оставляем ссылку без изменений
 
     # Заменяем ссылки в тексте
-    return link_pattern.sub(replace_match, text)
+    result = link_pattern.sub(replace_match, text)
+    logger.info(f"[replace_links] Результирующий текст {result}")
+    return result
+
 
 def convert_round_video(input_file, output_file):
     """
@@ -552,6 +564,29 @@ def add_closing_bracket_if_needed(text):
     if text is not None and text.count('(') > text.count(')'):
         text += ')'
     return text
+
+import ffmpeg
+
+def generate_thumbnail(video_path, time='00:00:01'):
+    # Получаем базовое имя файла без расширения
+    base_name = os.path.splitext(video_path)[0]
+    # Формируем имя миниатюры с расширением .jpg
+    thumbnail_path = f"{base_name}.jpg"
+    try:
+        (
+            ffmpeg
+            .input(video_path, ss=time)
+            .filter('scale', 320, -1)
+            .output(thumbnail_path, vframes=1)
+            .overwrite_output()
+            .run(quiet=True)
+        )
+    except ffmpeg.Error as e:
+        print('Ошибка при создании миниатюры:', e)
+        raise
+    # Возвращаем путь к миниатюре
+    return thumbnail_path
+
 
 
 

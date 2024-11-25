@@ -98,7 +98,7 @@ async def start_client_bot():
     except Exception as e:
         logger.error(f"Ошибка при запуске клиента: {e}")
 
-async def send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id=None, buttons=None, attributes=None, messageIds=None, isTgsticker=False, isVoice=False):
+async def send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id=None, buttons=None, attributes=None, messageIds=None, isTgsticker=False, isVoice=False, isVideo=False, thumb=None):
     logger.info(f"[send_message_to_channels] Попытка отправки сообщения")
     # Создаем уникальный идентификатор сообщения/файла
     unique_id = message_text if message_text else ""
@@ -124,6 +124,18 @@ async def send_message_to_channels(channels_to_send, message_text, files, reply_
                     logger.info(f"[send_message_to_channels][channel:{channel}] Отправка файла клиентом в канал: {channel}, файлы: {files}, buttons: {buttons}")
                     entity = await client.get_entity(channel)
                     await client.send_file(entity, files, caption=message_text, album=True, reply_to=reply_to_msg_id, buttons=buttons, attributes=attributes)
+                elif isVideo:
+                    logger.info(f"[send_message_to_channels][channel:{channel}] Отправка видео в канал: {channel}, файлы: {files}, buttons: {buttons}")
+                    entity = await client.get_entity(channel)
+                    await client.send_file(
+                        entity,
+                        file=files,
+                        thumb=thumb,
+                        caption=message_text,
+                        attributes=[attributes],
+                        mime_type='video/mp4',
+                        force_document=False
+                    )
                 else:
                     logger.info(f"[send_message_to_channels][channel:{channel}] Отправка файла ботом в канал: {channel}, файлы: {files}, buttons: {buttons}")
                     entity = await client_bot.get_entity(channel)
@@ -162,7 +174,9 @@ async def process_message(chat_id, reply_to_msg_id=None):
     isTgsticker = message_data.get('isTgsticker', None)
     messageIds = message_data.get('messageIds', None)
     isVoice = message_data.get('isVoice', None)
-    
+    isVideo = message_data.get('isVideo', None)
+    thumb = message_data.get('thumb', None)
+
     logger.info(f"[process_message][chat_id:{chat_id}] Сообщение из канала {chat_id}: {message_text}, Отправитель: {sender_name}, Файлы: {files}")
     
     logger.info(f"[process_message][chat_id:{chat_id}] Ids сообщений {messageIds}.")
@@ -176,7 +190,7 @@ async def process_message(chat_id, reply_to_msg_id=None):
     
     if setting and setting.is_enabled:
         logger.info(f"[process_message][chat_id:{chat_id}] setting.is_enabled = true Отправка сообщения без модерирования!")
-        await send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id, buttons, attributes, messageIds, isTgsticker, isVoice)
+        await send_message_to_channels(channels_to_send, message_text, files, reply_to_msg_id, buttons, attributes, messageIds, isTgsticker, isVoice, isVideo, thumb)
     else:
         modified_message, moderation_if_image, auto_moderation_and_send_text_message, channels_to_send = utils.replace_words(message_text, chat_id)
         logger.info(f"[process_message][chat_id:{chat_id}] moderation_if_image: {moderation_if_image}, file_paths: {files}, moderation_if_image and file_paths: {moderation_if_image and files}, modified_message: {modified_message}")
@@ -202,7 +216,9 @@ async def process_message(chat_id, reply_to_msg_id=None):
                 attributes,
                 messageIds,
                 isTgsticker,
-                isVoice
+                isVoice,
+                isVideo,
+                thumb
             )
     
     # Очищаем временное хранилище для текущего сообщения
@@ -274,16 +290,26 @@ async def process_single_message(event):
 
             if utils.is_video_file(file_path):
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Это видео")
+                logger.info(f"[process_single_message][chat_id:{chat_id}] Атрибуты входного видео:")
+                for attribute in message.media.document.attributes:
+                    if isinstance(attribute, DocumentAttributeVideo):
+                        logger.info(f"[process_single_message][chat_id:{chat_id}] Это DocumentAttributeVideo:")
+                        utils.log_attributes(attribute)
+                    else:
+                        logger.info(f"[process_single_message][chat_id:{chat_id}] Это не DocumentAttributeVideo")
+
                 width, height, duration, fps = utils.get_video_dimensions_cv2(file_path)
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Получили атрибуты видео width:{width} , height:{height}, duration:{duration}")
                  # Создание атрибутов для видео
-                video_attributes = [DocumentAttributeVideo(
+                video_attributes = DocumentAttributeVideo(
                                         duration=duration,
                                         w=width,
                                         h=height,
                                         supports_streaming=True
-                                   )]
+                                   )
                 message_parts[chat_id].setdefault('attributes', []).append(video_attributes)
+                message_parts[chat_id]['isVideo'] = True
+                message_parts[chat_id]['thumb'] = utils.generate_thumbnail(file_path)
 
 
             if utils.is_sticker(file_path) or (document.mime_type == 'application/x-tgsticker' and document.attributes):
@@ -344,6 +370,7 @@ async def process_single_message(event):
                 await asyncio.sleep(COLLECT_TIMEOUT)
             else:
                 logger.info(f"[process_single_message][chat_id:{chat_id}] Это стикер отправляем сразу.")
+                
                 
             await process_message(chat_id, reply_to_msg_id)
         else:
